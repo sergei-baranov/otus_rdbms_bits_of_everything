@@ -10,7 +10,23 @@
 Я разбил его на куски по 1М строк и загрузил через LOAD DATA 5 из них в бд.
 Это было ещё в декабре, восстанавливаю историю из чата общения с сисадминами.
 
-Исходный файл:
+Сам себе заметка, чтобы потом вспомнить, когда создавал тейблспейс,
+была проблема с apparmor (плюс к правам и владельцам):
+
+    sudo nano /etc/apparmor.d/usr.sbin.mysqld
+
+    # Allow data dir access
+    /var/lib/mysql/ r,
+    /var/lib/mysql/** rwk,
+    /mysql_tablespaces/ r,  
+    /mysql_tablespaces/hd2t/ r,
+    /mysql_tablespaces/hd2t/** rwk,
+    # три последние строчки - это я добавил
+
+    mysql> CREATE TABLESPACE ts1 ADD DATAFILE '/mysql_tablespaces/hd2t/ts1.ibd' ENGINE InnoDB;
+    Query OK, 0 rows affected (0,11 sec)
+
+Исходный файл c дампом в csv:
 
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ ls -lah
     итого 231G
@@ -34,7 +50,7 @@
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ tail -n 1 xjb
     2377884327,2019-09-05,397,100,0,0,0,0,0,0,0,0,0,\N,0000-00-00,\N,171575,\N,\N,\N,\N,\N,\N,\N,\N,\N,\N,826.5,2019-09-05-171575-39,0.068710061306015,\N,\N,\N,0.06875,\N,\N,\N,\N,\N,\N,\N,\N,\N,\N,0,\N,0,0,0,0,1.8770491803279,\N,\N,\N,\N,\N,0,0,0,0,0,2019-09-05 15:05:37,\N,\N,\N,\N,\N,\N,\N,0,\N,\N,\N,\N
 
-Определил директорию для файлов
+Выяснил директорию для файлов, откуда мускул согласен их заливать:
 
     mysql> SELECT @@secure_file_priv;
     +-----------------------+
@@ -43,21 +59,19 @@
     | /var/lib/mysql-files/ |
     +-----------------------+
 
-Копировал файлы в неё, ставил разрешения
+Скопировал файлы в неё, проставил разрешения:
 
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ sudo cp ./xjb /var/lib/mysql-files/xjb
     sudo chown mysql /var/lib/mysql-files/xjb
     sudo chgrp mysql /var/lib/mysql-files/xjb
 
-Была ещё одна заморока с apparmor-ом. Не помню точно как, но как-то сказал ему, что можно mysql это делать.
-
-
-И заливал
+И заливал вот так:
 
     mysql> LOAD DATA INFILE '/var/lib/mysql-files/xja' IGNORE INTO TABLE su.tradings FIELDS TERMINATED BY ',' ENCLOSED BY '' LINES TERMINATED BY '\n';
     Query OK, 1000000 rows affected, 65535 warnings (9 min 32,10 sec)
     Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 766849
 
+9 min 32,10 sec как-то много.
 Выставил настройки для скорости: sync_binlog был 1, innodb_flush_method был fsync,
 поменял, стало:
 
@@ -82,6 +96,8 @@
     mysql> LOAD DATA INFILE '/var/lib/mysql-files/xiv' IGNORE INTO TABLE su.tradings FIELDS TERMINATED BY ',' ENCLOSED BY '' LINES TERMINATED BY '\n';
     Query OK, 0 rows affected, 65535 warnings (32,97 sec)
     Records: 1000000  Deleted: 0  Skipped: 1000000  Warnings: 1772542
+
+32,97 sec - это гораздо лучше
 
 Варнинги смотрел через SHOW WARNINGS; - там ругалось на поля типа date со значением 0000-00-00, но записи заливало:
 

@@ -11,12 +11,14 @@
 Это было ещё в декабре, восстанавливаю историю из чата общения с сисадминами.
 
 Исходный файл:
+
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ ls -lah
     итого 231G
     -rwxr-xr-x  1 root    root    104G дек  6 02:14 tradings.txt
     ...
 
 Разбил через split -l 1000000 tradings.txt:
+
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ ls -lah
     итого 231G
     -rwxr-xr-x  1 root    root    104G дек  6 02:14 tradings.txt
@@ -28,10 +30,12 @@
     -rw-r--r--  1 root    root    140M дек  8 04:49 xjb
 
 Строки в файлах вот такие:
+
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ tail -n 1 xjb
     2377884327,2019-09-05,397,100,0,0,0,0,0,0,0,0,0,\N,0000-00-00,\N,171575,\N,\N,\N,\N,\N,\N,\N,\N,\N,\N,826.5,2019-09-05-171575-39,0.068710061306015,\N,\N,\N,0.06875,\N,\N,\N,\N,\N,\N,\N,\N,\N,\N,0,\N,0,0,0,0,1.8770491803279,\N,\N,\N,\N,\N,0,0,0,0,0,2019-09-05 15:05:37,\N,\N,\N,\N,\N,\N,\N,0,\N,\N,\N,\N
 
 Определил директорию для файлов
+
     mysql> SELECT @@secure_file_priv;
     +-----------------------+
     | @@secure_file_priv    |
@@ -40,6 +44,7 @@
     +-----------------------+
 
 Копировал файлы в неё, ставил разрешения
+
     feynman@feynman-desktop:/mysql_tablespaces/hd2t$ sudo cp ./xjb /var/lib/mysql-files/xjb
     sudo chown mysql /var/lib/mysql-files/xjb
     sudo chgrp mysql /var/lib/mysql-files/xjb
@@ -48,12 +53,14 @@
 
 
 И заливал
+
     mysql> LOAD DATA INFILE '/var/lib/mysql-files/xja' IGNORE INTO TABLE su.tradings FIELDS TERMINATED BY ',' ENCLOSED BY '' LINES TERMINATED BY '\n';
     Query OK, 1000000 rows affected, 65535 warnings (9 min 32,10 sec)
     Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 766849
 
 Выставил настройки для скорости: sync_binlog был 1, innodb_flush_method был fsync,
 поменял, стало:
+
     mysql> SELECT @@innodb_flush_method;
     +-----------------------+
     | @@innodb_flush_method |
@@ -61,6 +68,7 @@
     | O_DIRECT              |
     +-----------------------+
     1 row in set (0,00 sec)
+    
     mysql> SELECT @@sync_binlog;
     +---------------+
     | @@sync_binlog |

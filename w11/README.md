@@ -1,3 +1,6 @@
+Сначала вторая часть задания, потом первая.
+-------------------------------------------
+
 ## 2. Загрузить данные из приложенных в материалах csv.<br/>Реализовать следующими путями: LOAD DATA, mysqlimport.
 ### 2.1. LOAD DATA
 
@@ -255,3 +258,53 @@ HDD скрипел минут 30. Проверяем опции записи:
     Records: 1000000  Deleted: 0  Skipped: 1000000  Warnings: 1803521
 
 Ага, всё понятно, те 32 секунды на hdd - это ошибка была, второй раз прогнал файл по существующим записям... А жаль )
+
+Тогда ещё попробую запихнуть LOAD DATA в одну транзакцию.
+
+    $ sudo cp /mysql_tablespaces/hd2t/xir /var/lib/mysql-files/tradings.d
+    $ sudo chown mysql:mysql /var/lib/mysql-files/tradings.d
+
+    mysql> START TRANSACTION READ WRITE; LOAD DATA INFILE '/var/lib/mysql-files/tradings.d' IGNORE INTO TABLE su.tradings FIELDS TERMINATED BY ',' ENCLOSED BY '' LINES TERMINATED BY '\n'; COMMIT;
+    Query OK, 0 rows affected (0,00 sec)
+
+    Query OK, 1000000 rows affected, 65535 warnings (45 min 57,12 sec)
+    Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 801662
+
+    Query OK, 0 rows affected (1,67 sec)
+
+То же самое.
+
+Ну и увеличим буфер лога для интересу
+
+    $ sudo cp /mysql_tablespaces/hd2t/xiq /var/lib/mysql-files/tradings.e
+    $ sudo chown mysql:mysql /var/lib/mysql-files/tradings.e
+
+    mysql> SET GLOBAL innodb_log_buffer_size = 167772160;
+    Query OK, 0 rows affected (0,01 sec)
+
+    mysql> SELECT @@innodb_log_buffer_size;
+    +--------------------------+
+    | @@innodb_log_buffer_size |
+    +--------------------------+
+    |                167772160 |
+    +--------------------------+
+    1 row in set (0,00 sec)
+
+    mysql> START TRANSACTION READ WRITE;
+    Query OK, 0 rows affected (0,00 sec)
+
+    mysql> LOAD DATA INFILE '/var/lib/mysql-files/tradings.e' IGNORE INTO TABLE su.tradings FIELDS TERMINATED BY ',' ENCLOSED BY '' LINES TERMINATED BY '\n';
+
+    mysql> LOAD DATA INFILE '/var/lib/mysql-files/tradings.e' IGNORE INTO TABLE su.tradings FIELDS TERMINATED BY ',' ENCLOSED BY '' LINES TERMINATED BY '\n';
+    Query OK, 1000000 rows affected, 65535 warnings (53 min 35,28 sec)
+    Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 797277
+
+    mysql> COMMIT;
+    Query OK, 0 rows affected (0,75 sec)
+
+Вобщем каждый следующий лимон льётся дольше предыдущего, что как бы логично.
+
+innodb_log_buffer_size в моём случае на это не повлиял.
+
+На этом всё пока что, думаю, перестройка всех многочисленных индексов su.tradings на hdd съедает всё время.
+В оптимизированном варианте таблицы (таблиц) такого количества индексов уже не будет,там может проведём такие опыты с LOAD DATA ещё раз.

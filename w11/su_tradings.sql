@@ -1,4 +1,4 @@
- CREATE TABLE `tradings` (
+ CREATE TABLE su.`tradings` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id результата торгов',
   `date` date NOT NULL DEFAULT '1000-01-01' COMMENT 'дата торгов',
   `place_id` int(11) NOT NULL DEFAULT '0' COMMENT 'id биржи',

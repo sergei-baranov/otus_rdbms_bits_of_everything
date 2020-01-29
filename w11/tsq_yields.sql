@@ -1,4 +1,4 @@
-REATE TABLE tsq.`yields` (
+CREATE TABLE tsq.`yields` (
   `id` BIGINT UNSIGNED NOT NULL COMMENT 'PK, FK to prices.id',
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
   `clearance_profit` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к погашения простая (от индик. цены), в долях',

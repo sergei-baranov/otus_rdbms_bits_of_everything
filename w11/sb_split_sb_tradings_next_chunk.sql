@@ -85,7 +85,7 @@ main:BEGIN
 
     /* fields for select from sb.tradings to cte */
     SET l_all_fields = CONCAT(
-    '      `id`, `place_id`, `date`, `emission_id`\n',
+    '      `id`\n',
     '    , `boardid`\n',
     '    , `clear_price`, `buying_quote`, `selling_quote`, `last_price`\n',
     '    , `open_price`, `max_price`, `min_price`, `avar_price`, `mid_price`\n',
@@ -117,14 +117,14 @@ main:BEGIN
     '      sb.tradings PARTITION (', l_src_part_num, ')\n',
     '    WHERE\n',
     '      `place_id` = ', in_trading_ground_id, '\n',
-    '      AND `date` = ', in_anchor_date, '\n',
+    '      AND `date` = "', in_anchor_date, '"\n',
     '      AND `emission_id` IN (', in_bonds_ids, ')\n',
     '    ORDER BY NULL'
     );
 
     /* fields for select from cte and insert into tsq.prices */
     SET l_prices_fields = CONCAT(
-        '`id`, `place_id`, `date`, `emission_id`, `boardid`',
+        '`id`, `boardid`',
         ', `clear_price`, `buying_quote`, `selling_quote`, `last_price`',
         ', `open_price`, `max_price`, `min_price`, `avar_price`, `mid_price`',
         ', `marketprice`, `marketprice2`, `admittedquote`, `legalcloseprice`'
@@ -163,55 +163,70 @@ main:BEGIN
 
     /* INSERT INTO tsq.prices */
     SET @sql_prices = CONCAT(
-        'WITH cte (',
+        'INSERT IGNORE INTO tsq.prices PARTITION (', l_dest_part_num, ') (\n',
+        l_prices_fields,
+        ') WITH cte (',
         l_all_fields,
         ') AS (',
         l_sql_select,
-        ') INSERT IGNORE INTO tsq.prices PARTITION (', l_dest_part_num, ') SELECT ',
+        ') SELECT ',
         l_prices_fields,
         ' FROM cte'
     );
 
+    /* debug
+    SELECT @sql_prices;
+    LEAVE main;
+    */
+
     /* INSERT INTO tsq.yields */
     SET @sql_yields = CONCAT(
-        'WITH cte (',
+        'INSERT IGNORE INTO tsq.yields PARTITION (', l_dest_part_num, ') (\n',
+        l_yields_fields,
+        ') WITH cte (',
         l_all_fields,
         ') AS (',
         l_sql_select,
-        ') INSERT IGNORE INTO tsq.yields PARTITION (', l_dest_part_num, ') SELECT ',
+        ') SELECT ',
         l_yields_fields,
         ' FROM cte'
     );
 
     /* INSERT INTO tsq.volumes */
     SET @sql_volumes = CONCAT(
-        'WITH cte (',
+        'INSERT IGNORE INTO tsq.volumes PARTITION (', l_dest_part_num, ') (\n',
+        l_volumes_fields,
+        ') WITH cte (',
         l_all_fields,
         ') AS (',
         l_sql_select,
-        ') INSERT IGNORE INTO tsq.volumes PARTITION (', l_dest_part_num, ') SELECT ',
+        ') SELECT ',
         l_volumes_fields,
         ' FROM cte'
     );
 
     /* INSERT INTO tsq.risks_metrics */
     SET @sql_risks_metrics = CONCAT(
-        'WITH cte (',
+        'INSERT IGNORE INTO tsq.risks_metrics PARTITION (', l_dest_part_num, ') (\n',
+        l_risks_metrics_fields,
+        ') WITH cte (',
         l_all_fields,
         ') AS (',
         l_sql_select,
-        ') INSERT IGNORE INTO tsq.risks_metrics PARTITION (', l_dest_part_num, ') SELECT ',
+        ') SELECT ',
         l_risks_metrics_fields,
         ' FROM cte'
     );
 
     /* INSERT INTO tsq.spreads */
     SET @sql_spreads = CONCAT(
-        'WITH cte (',
+        'INSERT IGNORE INTO tsq.spreads PARTITION (', l_dest_part_num, ') (\n',
+        l_spreads_fields,
+        ') WITH cte (',
         l_all_fields,
         ') AS (',
         l_sql_select,
-        ') INSERT IGNORE INTO tsq.spreads PARTITION (', l_dest_part_num, ') SELECT ',
+        ') SELECT ',
         l_spreads_fields,
         ' FROM cte'
     );

@@ -1,8 +1,8 @@
-REATE TABLE tsq.`prices` (
+CREATE TABLE tsq.`prices` (
   `id` BIGINT UNSIGNED NOT NULL COMMENT 'PK, Идентификатор записи, упаковка биржа-дата-бумага',
-  `place_id` SMALLINT UNSIGNED NOT NULL GENERATED ALWAYS AS ((`id` DIV 100000000000000)) STORED COMMENT '',
-  `date` DATE NOT NULL GENERATED ALWAYS AS (cast((20000000 + ((`id` DIV 100000000) % 1000000)) as date)) STORED COMMENT '',
-  `emission_id` INT UNSIGNED NOT NULL GENERATED ALWAYS AS ((`id` % 100000000)) STORED COMMENT 'id эмиссии (su.emission.id)',
+  `place_id` SMALLINT UNSIGNED GENERATED ALWAYS AS ((`id` DIV 100000000000000)) STORED COMMENT '',
+  `date` DATE GENERATED ALWAYS AS (cast((20000000 + ((`id` DIV 100000000) % 1000000)) as date)) STORED COMMENT '',
+  `emission_id` INT UNSIGNED GENERATED ALWAYS AS ((`id` % 100000000)) STORED COMMENT 'id эмиссии (su.emission.id)',
   `boardid` SMALLINT UNSIGNED DEFAULT NULL COMMENT 'Режим торгов',
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время обновления записи',
   `clear_price` TINYINT UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Под вопросом: см. коммент ниже',
@@ -18,9 +18,9 @@ REATE TABLE tsq.`prices` (
   `marketprice2` DECIMAL(16,10) UNSIGNED DEFAULT NULL COMMENT 'Рыночная цена (2), % от номинала',
   `admittedquote` DECIMAL(16,10) UNSIGNED DEFAULT NULL COMMENT 'Признаваемая котировка, % от номинала',
   `legalcloseprice` DECIMAL(16,10) UNSIGNED DEFAULT NULL COMMENT 'Цена закрытия, % от номинала',
-  `indicative_price` DECIMAL(16,10) NULL UNSIGNED GENERATED ALWAYS AS ((case when (`avar_price` > 0) then `avar_price` when (`marketprice` > 0) then `marketprice` when (`legalcloseprice` > 0) then `legalcloseprice` when (`admittedquote` > 0) then `admittedquote` when (`mid_price` > 0) then `mid_price` when (`last_price` > 0) then `last_price` else NULL end)) STORED COMMENT 'Индикативная цена, % от номинала',
-  `indicative_price_type` VARCHAR(16) NULL GENERATED ALWAYS AS ((case when (`avar_price` > 0) then _utf8mb4'Avg' when (`marketprice` > 0) then _utf8mb4'Market' when (`legalcloseprice` > 0) then _utf8mb4'Close' when (`admittedquote` > 0) then _utf8mb4'Admitted' when (`mid_price` > 0) then _utf8mb4'Mid' when (`last_price` > 0) then _utf8mb4'Last' else NULL end)) STORED COMMENT 'Тип индикативной цены',
-  `bid_ask_spread` DECIMAL(23,10) NULL GENERATED ALWAYS AS (if(((`selling_quote` <> 0) and (`buying_quote` <> 0)),((`selling_quote` - `buying_quote`) * 100),NULL)) STORED COMMENT 'Bid-Ask spread по цене, bp',
+  `indicative_price` DECIMAL(16,10) UNSIGNED GENERATED ALWAYS AS ((case when (`avar_price` > 0) then `avar_price` when (`marketprice` > 0) then `marketprice` when (`legalcloseprice` > 0) then `legalcloseprice` when (`admittedquote` > 0) then `admittedquote` when (`mid_price` > 0) then `mid_price` when (`last_price` > 0) then `last_price` else NULL end)) STORED COMMENT 'Индикативная цена, % от номинала',
+  `indicative_price_type` VARCHAR(16) GENERATED ALWAYS AS ((case when (`avar_price` > 0) then _utf8mb4'Avg' when (`marketprice` > 0) then _utf8mb4'Market' when (`legalcloseprice` > 0) then _utf8mb4'Close' when (`admittedquote` > 0) then _utf8mb4'Admitted' when (`mid_price` > 0) then _utf8mb4'Mid' when (`last_price` > 0) then _utf8mb4'Last' else NULL end)) STORED COMMENT 'Тип индикативной цены',
+  `bid_ask_spread` DECIMAL(23,10) GENERATED ALWAYS AS (if(((`selling_quote` <> 0) and (`buying_quote` <> 0)),((`selling_quote` - `buying_quote`) * 100),NULL)) STORED COMMENT 'Bid-Ask spread по цене, bp',
   PRIMARY KEY (`id`),
   KEY `pde` (`place_id`,`date`,`emission_id`)
   /* keys */

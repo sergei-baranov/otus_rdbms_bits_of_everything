@@ -1,7 +1,7 @@
 CREATE TABLE tsq.`volumes` (
   `id` BIGINT UNSIGNED NOT NULL COMMENT 'PK, FK to prices.id',
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время обновления записи',
-  `overturn` DECIMAL(30,10) UNSIGNED DEFAULT NULL COMMENT 'Оборот',
+  `overturn` DECIMAL(30,10) DEFAULT NULL COMMENT 'Оборот',
   `volume` INT DEFAULT NULL COMMENT 'Объем сделок в бумагах',
   `volume_money` INT DEFAULT NULL COMMENT 'Объем сделок в денежных единицах',
   `agreement_number` INT DEFAULT NULL COMMENT 'Количество сделок',

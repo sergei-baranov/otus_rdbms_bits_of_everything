@@ -6,7 +6,7 @@ CREATE TABLE tsq.`two_last_ids` (
  `tradings_id` BIGINT UNSIGNED NOT NULL COMMENT 'Последние торги по бумаге на указанной бирже (su.tradings.id)',
  `prev_tradings_id` BIGINT UNSIGNED DEFAULT NULL COMMENT 'Предпоследние торги по бумаге на указанной бирже (su.tradings.id)',
  `date` DATE NOT NULL COMMENT 'Дата последних торгов',
- `prev_date` DATE DEFAULT NULL,
+ `prev_date` DATE DEFAULT NULL COMMENT 'Дата предпоследних торгов',
  PRIMARY KEY (`id`) USING BTREE,
  UNIQUE KEY `ep` (`emission_id`,`place_id`) USING BTREE,
  KEY `p_e` (`place_id`,`emission_id`) USING BTREE,

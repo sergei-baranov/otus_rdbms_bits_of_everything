@@ -1,8 +1,8 @@
 CREATE TABLE tsq.`spreads` (
   `id` BIGINT UNSIGNED NOT NULL COMMENT 'PK, FK to prices.id',
-  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
-  `g_spread` DECIMAL(23,10) DEFAULT NULL COMMENT 'G-spread, bp',
-  `t_spread` DECIMAL(23,10) DEFAULT NULL COMMENT 'T-spread, bp',
+  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'время последнего обновления записи; auto',
+  `g_spread` DECIMAL(23,10) DEFAULT NULL COMMENT 'G-spread',
+  `t_spread` DECIMAL(23,10) DEFAULT NULL COMMENT 'T-spread',
   `t_spread_benchmark` INT UNSIGNED DEFAULT NULL COMMENT 'Эмиссия-бенчмарк для T-spread (su.emission.id)',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `update_time` (`update_time`) USING BTREE

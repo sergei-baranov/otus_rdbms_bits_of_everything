@@ -8,4 +8,4 @@ CREATE TABLE tsq.`moex_last_prices` (
  PRIMARY KEY (`id`) USING BTREE,
  UNIQUE KEY `ed` (`emission_id`,`date`) USING BTREE,
  UNIQUE KEY `de` (`date`,`emission_id`) USING BTREE
-) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Последняя цена на Московской бирже и НКД (не вся МСК биржа!) для портфеля IF';
+) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Последняя цена на Московской бирже и НКД (не вся МСК биржа!) для портфеля IF';

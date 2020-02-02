@@ -1,9 +1,9 @@
 CREATE TABLE tsq.`risks_metrics` (
   `id` BIGINT UNSIGNED NOT NULL COMMENT 'PK, FK to prices.id',
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
-  `dur` DECIMAL(18,10) UNSIGNED DEFAULT NULL COMMENT 'Дюрация к погашению (от индик. цены), в днях',
-  `dur_to` DECIMAL(18,10) UNSIGNED DEFAULT NULL COMMENT 'Дюрация к оферте (от индик. цены), в днях',
-  `duration` DECIMAL(18,10) UNSIGNED GENERATED ALWAYS AS (if((`dur` <> 0),`dur`,nullif(`dur_to`,0))) STORED COMMENT 'Индикативная дюрация, в днях',
+  `dur` DECIMAL(18,10) DEFAULT NULL COMMENT 'Дюрация к погашению (от индик. цены), в днях',
+  `dur_to` DECIMAL(18,10) DEFAULT NULL COMMENT 'Дюрация к оферте (от индик. цены), в днях',
+  `duration` DECIMAL(18,10) GENERATED ALWAYS AS (if((`dur` <> 0),`dur`,nullif(`dur_to`,0))) STORED COMMENT 'Индикативная дюрация, в днях',
   `dur_mod` DECIMAL(15,10) DEFAULT NULL COMMENT 'Модифицированная дюрация к погашению (от индик. цены)',
   `dur_mod_to` DECIMAL(15,10) DEFAULT NULL COMMENT 'Модифицированная дюрация к оферте (от индик. цены)',
   `modified_duration` DECIMAL(15,10) GENERATED ALWAYS AS (if((`dur_mod` <> 0),`dur_mod`,nullif(`dur_mod_to`,0))) STORED COMMENT 'Индикативная модифицированная дюрация',

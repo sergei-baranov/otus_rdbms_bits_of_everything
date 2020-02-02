@@ -5,7 +5,7 @@ CREATE TABLE tsq.`yields` (
   `offer_profit` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к оферте простая (от индик. цены), в долях',
   `clearance_profit_effect` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к погашению эффективная (от индик. цены), в долях ',
   `offer_profit_effect` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к оферте эффективная (от индик. цены), в долях ',
-  `coupon_profit_effect` DECIMAL(16,10) DEFAULT NULL COMMENT '??????',
+  `coupon_profit_effect` DECIMAL(16,10) DEFAULT NULL COMMENT 'current_yield',
   `clearance_profit_nominal` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к погашению номинальная (от индик. цены), в долях ',
   `offer_profit_nominal` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к оферте номинальная (от индик. цены), в долях ',
   `ytm_bid` DECIMAL(16,10) DEFAULT NULL COMMENT 'Доходность к погашению эфф. по цене Bid, в долях',

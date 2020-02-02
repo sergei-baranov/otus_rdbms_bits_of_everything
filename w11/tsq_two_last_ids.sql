@@ -1,0 +1,20 @@
+CREATE TABLE tsq.`two_last_ids` (
+ `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
+ `emission_id` INT NOT NULL COMMENT 'Бумага (su.emission.id)',
+ `place_id` INT NOT NULL COMMENT 'Торговая площадка (su.trading_ground.id)',
+ `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ `tradings_id` BIGINT UNSIGNED NOT NULL COMMENT 'Последние торги по бумаге на указанной бирже (su.tradings.id)',
+ `prev_tradings_id` BIGINT UNSIGNED DEFAULT NULL COMMENT 'Предпоследние торги по бумаге на указанной бирже (su.tradings.id)',
+ `date` DATE NOT NULL COMMENT 'Дата последних торгов',
+ `prev_date` DATE DEFAULT NULL,
+ PRIMARY KEY (`id`) USING BTREE,
+ UNIQUE KEY `ep` (`emission_id`,`place_id`) USING BTREE,
+ KEY `p_e` (`place_id`,`emission_id`) USING BTREE,
+ KEY `tradings_id` (`tradings_id`) USING BTREE,
+ KEY `prev_tradings_id` (`prev_tradings_id`) USING BTREE,
+ KEY `date` (`date`) USING BTREE,
+ KEY `prev_date` (`prev_date`) USING BTREE,
+ KEY `p_t` (`place_id`,`tradings_id`) USING BTREE,
+ KEY `p_pt` (`place_id`,`prev_tradings_id`) USING BTREE,
+KEY `update_time` (`update_time`) USING BTREE
+) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Две последние котировки по паре бумага-биржа развёрнуты в строку';

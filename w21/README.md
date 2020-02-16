@@ -302,5 +302,36 @@ ip машины с Ubuntu 192.168.1.64, ip ноутбука 192.168.1.45.
 Считаю, что всё прошло успешно, и первое дз по постгресу выполнено.
 Незашифрованный пароль конечно, детский сад, но для начала на домашней машине пойдёт.
 
+** **
+**PS: пообщался с сисадмином, установил md5 для пароля, задал пароль secret2:**
+
+    $ sudo nano /var/lib/pgpro/std-11/data/pg_hba.conf
+
+    # TYPE  DATABASE    USER    ADDRESS            METHOD
+    ...
+    # my notebook
+    host    all         all     192.168.1.45/32    md5
+    
+    $ sudo su - postgres
+    [sudo] пароль для feynman:
+    postgres@feynman-desktop:~$ psql
+    psql (11.6)
+    Введите "help", чтобы получить справку.
+    postgres=# \password postgres
+    Введите новый пароль:
+    Повторите его:
+    postgres=# quit
+    postgres@feynman-desktop:~$
+
+    $ s sudo /opt/pgpro/std-11/bin/pg-setup service stop
+    $ s sudo /opt/pgpro/std-11/bin/pg-setup service start
+
+Коннекчусь DBeaver-ом, получаю ошибку:
+
+    ВАЖНО: пользователь "postgres" не прошёл проверку подлинности (по паролю)
+
+В настройках DBeaver-а меняю пароль secret на secret2.
+Коннекчусь - всё работает!
+
 
 

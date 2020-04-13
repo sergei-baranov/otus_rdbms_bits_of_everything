@@ -19,7 +19,7 @@
 1. Далее три ноды докера spilo (https://github.com/zalando/spilo)
 1. Далее по вышеуказанным пунктам
 
-##1. etcd на хостовой машине
+## 1. etcd на хостовой машине
 
 Иду сюда: http://play.etcd.io/install
 
@@ -43,7 +43,7 @@
     >   endpoint health
     localhost:2379 is healthy: successfully committed proposal: took = 723.141µs
 
-##2. spilo. собираю image
+## 2. spilo. собираю image
 
     $ git clone https://github.com/zalando/spilo.git
     Клонирование в «spilo»…
@@ -66,7 +66,7 @@
     REPOSITORY    TAG        IMAGE ID        CREATED            SIZE
     myspilo       latest     c56fc35ddcb2    20 minutes ago     129MB
 
-##3. spilo. запускаю три контейнера
+## 3. spilo. запускаю три контейнера
 
 В одном терминале:
 
@@ -86,7 +86,7 @@
     
 Что-то пошло не так. Возможно, надо указать опции для подключения к etcd
 
-##4. Заставляем spilo-контейнеры работать через etcd хоста
+## 4. Заставляем spilo-контейнеры работать через etcd хоста
 
 Останавливаем etcd
 
@@ -144,7 +144,7 @@
 
 УРА
 
-##5. Интересно почитать, что там в etcd
+## 5. Интересно почитать, что там в etcd
 
 /service/
 

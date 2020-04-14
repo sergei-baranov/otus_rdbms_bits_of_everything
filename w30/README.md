@@ -19,6 +19,24 @@
 1. Далее три ноды докера spilo (https://github.com/zalando/spilo)
 1. Далее по вышеуказанным пунктам
 
+---------------------------------------------------------
+
+Шаги получились в итоге такие:
+
+1. etcd на хостовой машине
+1. spilo. собираю image
+1. spilo. запускаю три контейнера
+1. Заставляем spilo-контейнеры работать через etcd хоста
+1. Интересно почитать, что там в etcd
+1. Интересно посмотреть ,что там в patroni rest api
+1. Создадим тестовую базу
+1. Проверить статус репликации
+1. Подключение к мастеру в докер с хостовой машины
+1. Делаю failover через patronictl
+1. Делаю switchover через рест
+
+---------------------------------------------------------
+
 ## 1. etcd на хостовой машине
 
 Иду сюда: http://play.etcd.io/install
@@ -437,4 +455,240 @@ d0cacc06fa17
         "scope": "dummy"
       }
 
+## 9. подключимся к мастеру в докер с хостовой машины
 
+В postgres.yml в докере находим креденшлы:
+
+    postgresql:
+      authentication:
+        replication:
+          password: standby
+          username: standby
+        superuser:
+          password: zalando
+          username: postgres
+          
+Подключаемся с хостовой машины:
+
+    $ psql -h 172.17.0.2 -U postgres -p 5432
+    Пароль пользователя postgres:
+    psql (11.6, сервер 12.2 (Ubuntu 12.2-2.pgdg18.04+1))
+    ПРЕДУПРЕЖДЕНИЕ: psql имеет базовую версию 11, а сервер - 12.
+                 Часть функций psql может не работать.
+    SSL-соединение (протокол: TLSv1.3, шифр: TLS_AES_256_GCM_SHA384, бит: 256, сжатие: выкл.)
+    Введите "help", чтобы получить справку.
+    
+    postgres=# \l
+                                     Список баз данных
+       Имя     | Владелец | Кодировка | LC_COLLATE  |  LC_CTYPE   |     Права доступа
+    -------------+----------+-----------+-------------+-------------+-----------------------
+    postgres    | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 |
+    replicatest | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 |
+    template0   | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+               |          |           |             |             | postgres=CTc/postgres
+    template1   | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+               |          |           |             |             | postgres=CTc/postgres
+    (4 строки)
+    
+    postgres=# \connect replicatest
+    psql (11.6, сервер 12.2 (Ubuntu 12.2-2.pgdg18.04+1))
+    ПРЕДУПРЕЖДЕНИЕ: psql имеет базовую версию 11, а сервер - 12.
+                  Часть функций psql может не работать.
+    SSL-соединение (протокол: TLSv1.3, шифр: TLS_AES_256_GCM_SHA384, бит: 256, сжатие: выкл.)
+    Вы подключены к базе данных "replicatest" как пользователь "postgres".
+    replicatest=# select * from words;
+       word
+    --------------
+    abarakadabra
+    boo
+    (2 строки)
+
+## 10. Делаю failover через patronictl
+
+Иду в докер к мастеру и делаю patronictl failover
+(systemctl там нет, services patroni тоже не находит)
+
+    root@e9477f065cf0:/home/postgres# patronictl failover
+    Candidate ['54be6a8d7513', 'd0cacc06fa17'] []: d0cacc06fa17
+    Current cluster topology
+    +---------+--------------+------------+--------+---------+----+-----------+
+    | Cluster |    Member    |    Host    |  Role  |  State  | TL | Lag in MB |
+    +---------+--------------+------------+--------+---------+----+-----------+
+    |  dummy  | 54be6a8d7513 | 172.17.0.4 |        | running |  1 |         0 |
+    |  dummy  | d0cacc06fa17 | 172.17.0.3 |        | running |  1 |         0 |
+    |  dummy  | e9477f065cf0 | 172.17.0.2 | Leader | running |  1 |           |
+    +---------+--------------+------------+--------+---------+----+-----------+
+    Are you sure you want to failover cluster dummy, demoting current master e9477f065cf0? [y/N]: y
+    2020-04-14 01:09:33.22866 Successfully failed over to "d0cacc06fa17"
+    +---------+--------------+------------+--------+---------+----+-----------+
+    | Cluster |    Member    |    Host    |  Role  |  State  | TL | Lag in MB |
+    +---------+--------------+------------+--------+---------+----+-----------+
+    |  dummy  | 54be6a8d7513 | 172.17.0.4 |        | running |  1 |         0 |
+    |  dummy  | d0cacc06fa17 | 172.17.0.3 | Leader | running |  1 |           |
+    |  dummy  | e9477f065cf0 | 172.17.0.2 |        | stopped |    |   unknown |
+    +---------+--------------+------------+--------+---------+----+-----------+
+    root@e9477f065cf0:/home/postgres#
+
+Иду в докер к d0cacc06fa17 и вижу:
+
+    2020-04-14 01:09:19,485 INFO: no action.  i am a secondary and i am following a leader
+    2020-04-14 01:09:29,482 INFO: Lock owner: e9477f065cf0; I am d0cacc06fa17
+    2020-04-14 01:09:29,482 INFO: does not have lock
+    2020-04-14 01:09:29,485 INFO: no action.  i am a secondary and i am following a leader
+    2020-04-14 01:09:32,230 INFO: Lock owner: e9477f065cf0; I am d0cacc06fa17
+    2020-04-14 01:09:32,230 INFO: does not have lock
+    2020-04-14 01:09:32,235 INFO: no action.  i am a secondary and i am following a leader
+    2020-04-14 01:09:33,053 INFO: Cleaning up failover key after acquiring leader lock...
+    2020-04-14 01:09:33,058 WARNING: Could not activate Linux watchdog device: "Can't open watchdog device: [Errno 2] No such file or directory: '/dev/watchdog'"
+    2020-04-14 01:09:33,061 INFO: promoted self to leader by acquiring session lock
+    server promoting
+    2020-04-14 01:09:33,066 INFO: cleared rewind state after becoming the leader
+    2020-04-14 01:09:34,082 INFO: Lock owner: d0cacc06fa17; I am d0cacc06fa17
+    2020-04-14 01:09:34,183 INFO: no action.  i am the leader with the lock
+    SET
+    DO
+    DO
+    DO
+    NOTICE:  extension "pg_auth_mon" already exists, skipping
+    ...
+    GRANT
+    GRANT
+    RESET
+    2020-04-14 01:09:44,082 INFO: Lock owner: d0cacc06fa17; I am d0cacc06fa17
+    2020-04-14 01:09:44,089 INFO: no action.  i am the leader with the lock
+
+Иду в докер бывшего мастера и вижу:
+
+    2020-04-14 01:09:29,477 INFO: Lock owner: e9477f065cf0; I am e9477f065cf0
+    2020-04-14 01:09:29,482 INFO: no action.  i am the leader with the lock
+    2020-04-14 01:09:32,118 INFO: received failover request with leader=e9477f065cf0 candidate=d0cacc06fa17 scheduled_at=None
+    2020-04-14 01:09:32,126 INFO: Got response from d0cacc06fa17 http://172.17.0.3:8008/patroni: {"state": "running", "postmaster_start_time": "2020-04-13 00:24:20.739 UTC", "role": "replica", "server_version": 120002, "cluster_unlocked": false, "xlog": {"received_location": 117440512, "replayed_location": 117440512, "replayed_timestamp": "2020-04-13 23:20:01.827 UTC", "paused": false}, "timeline": 1, "database_system_identifier": "6814984661834715206", "patroni": {"version": "1.6.4", "scope": "dummy"}}
+    2020-04-14 01:09:32,225 INFO: Lock owner: e9477f065cf0; I am e9477f065cf0
+    2020-04-14 01:09:32,234 INFO: Got response from d0cacc06fa17 http://172.17.0.3:8008/patroni: {"state": "running", "postmaster_start_time": "2020-04-13 00:24:20.739 UTC", "role": "replica", "server_version": 120002, "cluster_unlocked": false, "xlog": {"received_location": 117440512, "replayed_location": 117440512, "replayed_timestamp": "2020-04-13 23:20:01.827 UTC", "paused": false}, "timeline": 1, "database_system_identifier": "6814984661834715206", "patroni": {"version": "1.6.4", "scope": "dummy"}}
+    2020-04-14 01:09:32,331 INFO: manual failover: demoting myself
+    2020-04-14 01:09:33,051 INFO: Leader key released
+    2020-04-14 01:09:35,060 INFO: Local timeline=1 lsn=0/8000028
+    2020-04-14 01:09:35,070 INFO: master_timeline=2
+    2020-04-14 01:09:35,070 INFO: master: history=1 0/80000A0       no recovery target specified
+    
+    2020-04-14 01:09:35,071 INFO: closed patroni connection to the postgresql cluster
+    2020-04-14 01:09:35 UTC [6721]: [1-1] 5e950d4f.1a41 0     LOG:  Auto detecting pg_stat_kcache.linux_hz parameter...
+    2020-04-14 01:09:35 UTC [6721]: [2-1] 5e950d4f.1a41 0     LOG:  pg_stat_kcache.linux_hz is set to 500000
+    2020-04-14 01:09:35 UTC [6721]: [3-1] 5e950d4f.1a41 0     LOG:  starting PostgreSQL 12.2 (Ubuntu 12.2-2.pgdg18.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0, 64-bit
+    2020-04-14 01:09:35 UTC [6721]: [4-1] 5e950d4f.1a41 0     LOG:  listening on IPv4 address "0.0.0.0", port 5432
+    2020-04-14 01:09:35 UTC [6721]: [5-1] 5e950d4f.1a41 0     LOG:  listening on IPv6 address "::", port 5432
+    2020-04-14 01:09:35,516 INFO: postmaster pid=6721
+    2020-04-14 01:09:35 UTC [6721]: [6-1] 5e950d4f.1a41 0     LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+    2020-04-14 01:09:35 UTC [6721]: [7-1] 5e950d4f.1a41 0     LOG:  redirecting log output to logging collector process
+    2020-04-14 01:09:35 UTC [6721]: [8-1] 5e950d4f.1a41 0     HINT:  Future log output will appear in directory "../pg_log".
+    /var/run/postgresql:5432 - rejecting connections
+    /var/run/postgresql:5432 - accepting connections
+    2020-04-14 01:09:42,226 INFO: Lock owner: d0cacc06fa17; I am e9477f065cf0
+    2020-04-14 01:09:42,226 INFO: does not have lock
+    2020-04-14 01:09:42,226 INFO: establishing a new patroni connection to the postgres cluster
+    2020-04-14 01:09:42,255 INFO: no action.  i am a secondary and i am following a leader
+    
+С хостовой машины делаю запрос по ресту
+
+    curl -s  http://172.17.0.2:8008/cluster | jq
+    
+    {
+      "members": [
+        {
+          "name": "54be6a8d7513",
+          "host": "172.17.0.4",
+          "port": 5432,
+          "role": "replica",
+          "state": "running",
+          "api_url": "http://172.17.0.4:8008/patroni",
+          "timeline": 2,
+          "lag": 0
+        },
+        {
+          "name": "d0cacc06fa17",
+          "host": "172.17.0.3",
+          "port": 5432,
+          "role": "leader",
+          "state": "running",
+          "api_url": "http://172.17.0.3:8008/patroni",
+          "timeline": 2
+        },
+        {
+          "name": "e9477f065cf0",
+          "host": "172.17.0.2",
+          "port": 5432,
+          "role": "replica",
+          "state": "running",
+          "api_url": "http://172.17.0.2:8008/patroni",
+          "timeline": 2,
+          "lag": 0
+        }
+      ]
+    }
+
+Убедимся, что прежний postgres теперь read-only
+
+    $ psql -h 172.17.0.2 -U postgres -p 5432
+    postgres=# \connect replicatest
+    replicatest=# select * from words;
+         word
+    --------------
+     abarakadabra
+     boo
+    (2 строки)
+    
+    replicatest=# insert into words (word) values (collins);
+    ERROR:  column "collins" does not exist
+    СТРОКА 1: insert into words (word) values (collins);
+                                               ^
+    replicatest=# insert into words (word) values ('collins');
+    ERROR:  cannot execute INSERT in a read-only transaction
+
+
+## 11. Делаю switchover через рест
+
+Сделаем через рест. Вернём первую ноду в статус мастера.
+(с третьей попытки, когда указали И текущего лидера, И кандидата)
+
+    $ curl -s http://172.17.0.3:8008/switchover -XPOST -d '{"candidate":"e9477f065cf0"}'
+    Switchover could be performed only from a specific leader
+    
+    $ curl -s http://172.17.0.3:8008/switchover -XPOST -d '{"leader":"e9477f065cf0"}'
+    leader name does not match
+    
+    $ curl -s http://172.17.0.3:8008/switchover -XPOST -d '{"leader":"d0cacc06fa17", "candidate":"e9477f065cf0"}'
+    Successfully switched over to "e9477f065cf0"
+    
+    $ curl -s  http://172.17.0.2:8008/cluster | jq                                                    {
+      "members": [
+        {
+          "name": "54be6a8d7513",
+          "host": "172.17.0.4",
+          "port": 5432,
+          "role": "replica",
+          "state": "running",
+          "api_url": "http://172.17.0.4:8008/patroni",
+          "timeline": 3,
+          "lag": 0
+        },
+        {
+          "name": "d0cacc06fa17",
+          "host": "172.17.0.3",
+          "port": 5432,
+          "role": "replica",
+          "state": "running",
+          "api_url": "http://172.17.0.3:8008/patroni",
+          "timeline": 3,
+          "lag": 0
+        },
+        {
+          "name": "e9477f065cf0",
+          "host": "172.17.0.2",
+          "port": 5432,
+          "role": "leader",
+          "state": "running",
+          "api_url": "http://172.17.0.2:8008/patroni",
+          "timeline": 3
+        }
+      ]
+    }

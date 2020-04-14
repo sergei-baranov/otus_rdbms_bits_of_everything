@@ -34,6 +34,8 @@
 1. Подключение к мастеру в докер с хостовой машины
 1. Делаю failover через patronictl
 1. Делаю switchover через рест
+1. Настраиваем HAProxy
+1. Поменять конфигурацию PostgreSQL + с параметром требующим перезагрузки
 
 ---------------------------------------------------------
 
@@ -692,3 +694,201 @@ d0cacc06fa17
         }
       ]
     }
+    
+## 12. Настраиваем HAProxy
+
+Устанавливаю на хостовой машине:
+
+    $ sudo apt install haproxy
+    ...
+    $ cd /etc/haproxy
+    feynman@feynman-desktop:/etc/haproxy$ ls -lah
+    итого 24K
+    drwxr-xr-x   3 root root 4,0K апр 14 22:26 .
+    drwxr-xr-x 138 root root  12K апр 14 22:26 ..
+    drwxr-xr-x   2 root root 4,0K апр 14 22:26 errors
+    -rw-r--r--   1 root root 1,3K окт 28 15:01 haproxy.cfg
+
+Ищем конфигурацию на сайте патрони
+
+    https://github.com/zalando/patroni/blob/master/haproxy.cfg
+    
+Меняем под себя:
+
+    $ sudo mv ./haproxy.cfg ./haproxy.cfg.old
+    $ sudo nano ./haproxy.cfg
+    
+    global
+        maxconn 100
+    
+    defaults
+        log global
+        mode tcp
+        retries 2
+        timeout client 30m
+        timeout connect 4s
+        timeout server 30m
+        timeout check 5s
+    
+    listen stats
+        mode http
+        bind *:7000
+        stats enable
+        stats uri /
+    
+    listen batman
+        bind *:5000
+        option httpchk
+        http-check expect status 200
+        default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
+        server postgresql_172.17.0.2_5432 172.17.0.2:5432 maxconn 100 check port 8008
+        server postgresql_172.17.0.3_5433 172.17.0.3:5433 maxconn 100 check port 8008
+        server postgresql_172.17.0.4_5433 172.17.0.4:5433 maxconn 100 check port 8008
+        
+Рестарт haproxy
+
+    $ systemctl restart haproxy
+    ==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ===
+    Чтобы перезапустить «haproxy.service», необходимо пройти аутентификацию.
+    Authenticating as: Feynman,,, (feynman)
+    Password:
+    ==== AUTHENTICATION COMPLETE ===
+    
+    $ systemctl status haproxy
+    ● haproxy.service - HAProxy Load Balancer
+       Loaded: loaded (/lib/systemd/system/haproxy.service; enabled; vendor preset: enabled)
+       Active: active (running) since Tue 2020-04-14 22:46:35 MSK; 9s ago
+         Docs: man:haproxy(1)
+               file:/usr/share/doc/haproxy/configuration.txt.gz
+      Process: 19357 ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q $EXTRAOPTS (code=exited, status=0/SUCCESS)
+     Main PID: 19365 (haproxy)
+        Tasks: 2 (limit: 4915)
+       CGroup: /system.slice/haproxy.service
+               ├─19365 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid
+               └─19368 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid
+    
+    апр 14 22:46:35 feynman-desktop systemd[1]: Starting HAProxy Load Balancer...
+    апр 14 22:46:35 feynman-desktop systemd[1]: Started HAProxy Load Balancer.
+
+Подключаемся:
+
+    $ psql -h 127.0.0.1 -p 5000 -U postgres
+    Пароль пользователя postgres:
+    ...
+    postgres=# \l
+                                       Список баз данных
+         Имя     | Владелец | Кодировка | LC_COLLATE  |  LC_CTYPE   |     Права доступа
+    -------------+----------+-----------+-------------+-------------+-----------------------
+     postgres    | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 |
+     replicatest | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 |
+     template0   | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+                 |          |           |             |             | postgres=CTc/postgres
+     template1   | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+                 |          |           |             |             | postgres=CTc/postgres
+    (4 строки)
+    
+видно, что это наш кластер из докеров (принял пароль zalando, бд replicatest есть, а моих локальных нет)
+
+## 13. Поменять конфигурацию PostgreSQL + с параметром требующим перезагрузки
+
+Я так понимаю, имеется в виду поменять конфигурацию кластера
+
+    
+    root@d0cacc06fa17:/home/postgres# patronictl edit-config
+    loop_wait: 10
+    maximum_lag_on_failover: 33554432
+    postgresql:
+      parameters:
+        archive_mode: 'on'
+        archive_timeout: 1800s
+        autovacuum_analyze_scale_factor: 0.02
+        autovacuum_max_workers: 5
+        autovacuum_vacuum_scale_factor: 0.05
+        checkpoint_completion_target: 0.9
+        hot_standby: 'on'
+        log_autovacuum_min_duration: 0
+        log_checkpoints: 'on'
+        log_connections: 'on'
+        log_disconnections: 'on'
+        log_line_prefix: '%t [%p]: [%l-1] %c %x %d %u %a %h '
+        log_lock_waits: 'on'
+        log_min_duration_statement: 500
+        log_statement: ddl
+        log_temp_files: 0
+        max_connections: 200
+        max_replication_slots: 10
+        max_wal_senders: 10
+        tcp_keepalives_idle: 900
+        tcp_keepalives_interval: 100
+        track_functions: all
+        wal_keep_segments: 8
+        wal_level: hot_standby
+        wal_log_hints: 'on'
+      use_pg_rewind: true
+      use_slots: true
+    retry_timeout: 10
+    ttl: 30
+    "/tmp/dummy-config-in5v3qsl.yaml" 33L, 885C written
+    ---
+    +++
+    @@ -18,7 +18,7 @@
+         log_min_duration_statement: 500
+         log_statement: ddl
+         log_temp_files: 0
+    -    max_connections: 1000
+    +    max_connections: 200
+         max_replication_slots: 10
+         max_wal_senders: 10
+         tcp_keepalives_idle: 900
+    
+    Apply these changes? [y/N]: y
+    Configuration changed
+    root@d0cacc06fa17:/home/postgres#
+
+    root@d0cacc06fa17:/home/postgres# patronictl list
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    | Cluster |    Member    |    Host    |  Role  |  State  | TL | Lag in MB | Pending restart |
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    |  dummy  | 54be6a8d7513 | 172.17.0.4 |        | running |  3 |         0 |        *        |
+    |  dummy  | d0cacc06fa17 | 172.17.0.3 |        | running |  3 |         0 |        *        |
+    |  dummy  | e9477f065cf0 | 172.17.0.2 | Leader | running |  3 |           |        *        |
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+
+Вижу Pending restart. Делаю restart:
+
+    root@d0cacc06fa17:/home/postgres# patronictl list
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    | Cluster |    Member    |    Host    |  Role  |  State  | TL | Lag in MB | Pending restart |
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    |  dummy  | 54be6a8d7513 | 172.17.0.4 |        | running |  3 |         0 |        *        |
+    |  dummy  | d0cacc06fa17 | 172.17.0.3 |        | running |  3 |         0 |        *        |
+    |  dummy  | e9477f065cf0 | 172.17.0.2 | Leader | running |  3 |           |        *        |
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    root@d0cacc06fa17:/home/postgres# patronictl restart dummy
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    | Cluster |    Member    |    Host    |  Role  |  State  | TL | Lag in MB | Pending restart |
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    |  dummy  | 54be6a8d7513 | 172.17.0.4 |        | running |  3 |         0 |        *        |
+    |  dummy  | d0cacc06fa17 | 172.17.0.3 |        | running |  3 |         0 |        *        |
+    |  dummy  | e9477f065cf0 | 172.17.0.2 | Leader | running |  3 |           |        *        |
+    +---------+--------------+------------+--------+---------+----+-----------+-----------------+
+    When should the restart take place (e.g. 2020-04-14T21:37)  [now]:
+    Are you sure you want to restart members e9477f065cf0, d0cacc06fa17, 54be6a8d7513? [y/N]: y
+    Restart if the PostgreSQL version is less than provided (e.g. 9.5.2)  []:
+    Success: restart on member e9477f065cf0
+    Success: restart on member d0cacc06fa17
+    Success: restart on member 54be6a8d7513
+    root@d0cacc06fa17:/home/postgres#
+
+    root@d0cacc06fa17:/home/postgres# patronictl list
+    +---------+--------------+------------+--------+---------+----+-----------+
+    | Cluster |    Member    |    Host    |  Role  |  State  | TL | Lag in MB |
+    +---------+--------------+------------+--------+---------+----+-----------+
+    |  dummy  | 54be6a8d7513 | 172.17.0.4 |        | running |  3 |         0 |
+    |  dummy  | d0cacc06fa17 | 172.17.0.3 |        | running |  3 |         0 |
+    |  dummy  | e9477f065cf0 | 172.17.0.2 | Leader | running |  3 |           |
+    +---------+--------------+------------+--------+---------+----+-----------+
+
+Вуаля.
+
+На этом вроде всё )

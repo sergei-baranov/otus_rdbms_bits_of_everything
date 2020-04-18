@@ -742,8 +742,8 @@ d0cacc06fa17
         http-check expect status 200
         default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
         server postgresql_172.17.0.2_5432 172.17.0.2:5432 maxconn 100 check port 8008
-        server postgresql_172.17.0.3_5433 172.17.0.3:5433 maxconn 100 check port 8008
-        server postgresql_172.17.0.4_5433 172.17.0.4:5433 maxconn 100 check port 8008
+        server postgresql_172.17.0.3_5432 172.17.0.3:5432 maxconn 100 check port 8008
+        server postgresql_172.17.0.4_5432 172.17.0.4:5432 maxconn 100 check port 8008
         
 Рестарт haproxy
 
@@ -797,18 +797,34 @@ d0cacc06fa17
             http-check expect status 503
             default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
             server postgresql_172.17.0.2_5432 172.17.0.2:5432 maxconn 100 check port 8008
-            server postgresql_172.17.0.3_5433 172.17.0.3:5433 maxconn 100 check port 8008
-            server postgresql_172.17.0.4_5433 172.17.0.4:5433 maxconn 100 check port 8008
+            server postgresql_172.17.0.3_5432 172.17.0.3:5432 maxconn 100 check port 8008
+            server postgresql_172.17.0.4_5432 172.17.0.4:5432 maxconn 100 check port 8008
 
 Пытаюсь подключиться:
 
+    $ sudo systemctl restart haproxy
+    
     $ psql -h 127.0.0.1 -p 5001 -U postgres
-    psql: сервер неожиданно закрыл соединение
-            Скорее всего сервер прекратил работу из-за сбоя
-            до или в процессе выполнения запроса.
-
-При этом подключение на порт 5000 по-прежнему работает нормально.
-Тут моих компетенций не хватает разобраться, иду дальше.
+    Пароль пользователя postgres:
+    psql (11.6, сервер 12.2 (Ubuntu 12.2-2.pgdg18.04+1))
+    ПРЕДУПРЕЖДЕНИЕ: psql имеет базовую версию 11, а сервер - 12.
+                    Часть функций psql может не работать.
+    SSL-соединение (протокол: TLSv1.3, шифр: TLS_AES_256_GCM_SHA384, бит: 256, сжатие: выкл.)
+    Введите "help", чтобы получить справку.
+    
+    postgres=# \l
+                                       Список баз данных
+         Имя     | Владелец | Кодировка | LC_COLLATE  |  LC_CTYPE   |     Права доступа
+    -------------+----------+-----------+-------------+-------------+-----------------------
+     postgres    | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 |
+     replicatest | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 |
+     template0   | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+                 |          |           |             |             | postgres=CTc/postgres
+     template1   | postgres | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+                 |          |           |             |             | postgres=CTc/postgres
+    (4 строки)
+    
+Работает!
 
 ## 13. Поменять конфигурацию PostgreSQL + с параметром требующим перезагрузки
 

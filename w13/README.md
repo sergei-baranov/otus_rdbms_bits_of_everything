@@ -432,8 +432,8 @@ You can turn off this feature to get a quicker startup with -A
 
 Database changed
 mysql> SELECT `id`, `allwords`, `rel` FROM (
-           ->       SELECT `id`, `allwords`, MATCH(`allwords`) AGAINST('citigroup*' IN BOOLEAN MODE) as `rel`
-           ->       FROM old.participants_suggest_900 WHERE MATCH(`allwords`) AGAINST('citigroup*' IN BOOLEAN MODE)
+           ->       SELECT `id`, `allwords`, MATCH(`allwords`) AGAINST('bank* chartered* standard*' IN BOOLEAN MODE) as `rel`
+           ->       FROM old.participants_suggest_900 WHERE MATCH(`allwords`) AGAINST('bank* chartered* standard*' IN BOOLEAN MODE)
            ->     ) t WHERE t.`rel` > 1 ORDER BY t.`rel` DESC;
        +--------+-------------------------------------------------+-------------------+
        | id     | allwords                                        | rel               |
@@ -447,6 +447,37 @@ mysql> SELECT `id`, `allwords`, `rel` FROM (
        |  87789 | citigroup limited pty                           | 7.729019641876221 |
        +--------+-------------------------------------------------+-------------------+
        7 rows in set (0.00 sec)
+mysql> SELECT `id`, `allwords`, `rel` FROM (
+           ->   SELECT `id`, `allwords`, MATCH(`allwords`) AGAINST('bank* chartered* standard*' IN BOOLEAN MODE) as `rel`
+           ->   FROM old.participants_suggest_900
+           ->   WHERE MATCH(`allwords`) AGAINST('bank* chartered* standard*' IN BOOLEAN MODE)
+           -> ) t
+           -> WHERE t.`rel` > 1 ORDER BY t.`rel` DESC;
+       +--------+------------------------------------------------------------------------------------------------------------------------------------+--------------------+
+       | id     | allwords                                                                                                                           | rel                |
+       +--------+------------------------------------------------------------------------------------------------------------------------------------+--------------------+
+       |   6420 | bank chartered standard                                                                                                            | 13.314371109008789 |
+       |  76417 | bank chartered ltd singapore standard                                                                                              | 13.314371109008789 |
+       | 124043 | bank chartered limited pakistan standard                                                                                           | 13.314371109008789 |
+       | 129441 | bank chartered new standard york                                                                                                   | 13.314371109008789 |
+       |  13750 | bank chartered hong kong limited standard                                                                                          | 13.314371109008789 |
+       | 100323 | bank chartered company limited public standard thai                                                                                | 13.314371109008789 |
+       |  23409 | chartered plc standard                                                                                                             | 12.915790557861328 |
+       |  46045 | chartered issuances opus sa                                                                                                        |  7.409934997558594 |
+       |    820 | africa bank limited of south standard the                                                                                          | 5.9044365882873535 |
+       |     58 | bank company joint russian standard stock ??????????? ???? ???????? ??????? ????????                                               | 5.9044365882873535 |
+       | 100173 | bank sa standard                                                                                                                   | 5.9044365882873535 |
+       |   5477 | bank commercial financial limited standard standart ???? ???????????? ???????? ???????????? ???????????????? ? ???????? ?????????? | 5.9044365882873535 |
+       |  57247 | bank limited namibia standard                                                                                                      | 5.9044365882873535 |
+       |  59347 | bank icbc plc standard                                                                                                             | 5.9044365882873535 |
+       |   1784 | bank company jointstock national standard ?? ???? ???????????? ????????                                                            | 5.9044365882873535 |
+       |   5382 |  agro asset management standard ???? ???????? ??? ???????? ?? ???????????                                                          |  5.505855560302734 |
+       |  11032 |  asset investment management standard ??????????? ???????? ?????????????? ???????? ???????? ???????? ?? ???????????                |  5.505855560302734 |
+       | 135781 | corporation fc financial jsc standard ?? ?????????? ???????? ?????????? ??                                                         |  5.505855560302734 |
+       |   8862 | standard unlu                                                                                                                      |  5.505855560302734 |
+       |   3539 | azerbaijan capital llc standard ???????????                                                                                        |  5.505855560302734 |
+       +--------+------------------------------------------------------------------------------------------------------------------------------------+--------------------+
+       20 rows in set (0.01 sec)
 ```
 
 как-то так...

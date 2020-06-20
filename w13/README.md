@@ -12,7 +12,7 @@
 6. [Релевантность](#relevancy)
 7. [Подходящий вариант](#win)
 8. [Charset/Colaltion](#collation)
-9. [Dockerhub](#dockerhub)
+9. [Docker](#docker)
 
 ## Общее описание <a name="commondescr"></a>
 
@@ -376,3 +376,5 @@ Sphinx мы пока не ставили, как переходный вариа
 на ссд-диске,<br/>
 на ненагруженной машине,<br/>
 с много памятью - результаты одинаковые.
+
+## Docker <a name="docker"></a>

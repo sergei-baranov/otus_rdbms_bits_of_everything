@@ -11,7 +11,7 @@
 5. [Ошибочность первоначального варианта](#fail)
 6. [Релевантность](#relevancy)
 7. [Подходящий вариант](#win)
-8. [Charset/Colaltion](#collation)
+8. [Charset/Collation](#collation)
 9. [Docker](#docker)
 
 ## Общее описание <a name="commondescr"></a>
@@ -297,7 +297,7 @@ Sphinx мы пока не ставили, как переходный вариа
 сам себе см. https://dev.mysql.com/doc/refman/8.0/en/fulltext-boolean.html
 (How Relevancy Ranking is Calculated)
 
-## Charset/Colaltion <a name="collation"></a>
+## Charset/Collation <a name="collation"></a>
 
 А теперь поэкспериментируем с CHARSET-ом
 
@@ -432,8 +432,8 @@ You can turn off this feature to get a quicker startup with -A
 
 Database changed
 mysql> SELECT `id`, `allwords`, `rel` FROM (
-           ->       SELECT `id`, `allwords`, MATCH(`allwords`) AGAINST('bank* chartered* standard*' IN BOOLEAN MODE) as `rel`
-           ->       FROM old.participants_suggest_900 WHERE MATCH(`allwords`) AGAINST('bank* chartered* standard*' IN BOOLEAN MODE)
+           ->       SELECT `id`, `allwords`, MATCH(`allwords`) AGAINST('citigroup*' IN BOOLEAN MODE) as `rel`
+           ->       FROM old.participants_suggest_900 WHERE MATCH(`allwords`) AGAINST('citigroup*' IN BOOLEAN MODE)
            ->     ) t WHERE t.`rel` > 1 ORDER BY t.`rel` DESC;
        +--------+-------------------------------------------------+-------------------+
        | id     | allwords                                        | rel               |

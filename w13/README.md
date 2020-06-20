@@ -415,6 +415,42 @@ rm -R old
 docker-compose exec otus_rdbms_201910_sergei_baranov_w13 mysql -u root -p12345
 ```
 
+или, если не пускает, то
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w13 mysql -uroot
+```
+
+то же из sh
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w13 /bin/sh
+# mysql -uroot
+mysql> use old;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT `id`, `allwords`, `rel` FROM (
+           ->       SELECT `id`, `allwords`, MATCH(`allwords`) AGAINST('citigroup*' IN BOOLEAN MODE) as `rel`
+           ->       FROM old.participants_suggest_900 WHERE MATCH(`allwords`) AGAINST('citigroup*' IN BOOLEAN MODE)
+           ->     ) t WHERE t.`rel` > 1 ORDER BY t.`rel` DESC;
+       +--------+-------------------------------------------------+-------------------+
+       | id     | allwords                                        | rel               |
+       +--------+-------------------------------------------------+-------------------+
+       | 131869 | asia citigroup global ltd markets               | 7.729019641876221 |
+       |    799 | citigroup inc                                   | 7.729019641876221 |
+       |  36175 | citigroup global limited markets                | 7.729019641876221 |
+       |  20905 | ag agco citigroup deutschland global markets    | 7.729019641876221 |
+       |  91057 | citigroup global inc markets                    | 7.729019641876221 |
+       |  70351 | citigroup funding global luxembourg markets sca | 7.729019641876221 |
+       |  87789 | citigroup limited pty                           | 7.729019641876221 |
+       +--------+-------------------------------------------------+-------------------+
+       7 rows in set (0.00 sec)
+```
+
+как-то так...
+
 #### Для использования в клиентских приложениях можно использовать команду:
 
 ```

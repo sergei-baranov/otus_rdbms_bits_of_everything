@@ -166,7 +166,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (822, 'WestLB WestLB WestLB AG WestLB AG', 'ag westlb', '2020-06-19 20:59:44'),
 (823, 'Yamaichi Yamaichi  ', ' yamaichi', '2020-06-19 20:59:44'),
 (824, 'Королевский Банк Шотландии The Royal Bank of Scotland Закрытое акционерное общество «Королевский Банк Шотландии» Closed Joint Stock Company \"The Royal Bank of Scotland\"', 'bank closed company joint of royal scotland stock the акционерное банк закрытое королевский общество шотландии', '2020-06-19 20:59:44'),
-(825, 'RBS Kazakhstan RBS Kazakhstan Акционерное общество \"Дочерний банк \"RBS(Kazakhstan) RBS Kazakhstan', 'kazakhstan rbs rbskazakhstan акционерное банк дочерний общество', '2020-06-19 20:59:44'),
+(825, 'RBS Kazakhstan RBS Kazakhstan Акционерное общество \"Дочерний банк \"RBS(Kazakhstan) RBS Kazakhstan', 'kazakhstan rbs rbskazakhstan акционерное банк дочерний общество', '2020-06-19 20:59:44');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (827, 'Автобанк Avtobank  ', ' avtobank автобанк', '2020-06-19 20:59:44'),
 (828, 'АКБ Гранит Granit Bank  ', ' bank granit акб гранит', '2020-06-19 20:59:44'),
 (832, 'Банк Кредит-Москва Credit Moscow Акционерный Коммерческий Банк «Кредит-Москва» (публичное акционерное общество) Credit-Moscow Joint stock Commercial Bank (Joint Stock Company)', 'bank commercial company credit creditmoscow joint moscow stock акционерное акционерный банк коммерческий кредитмосква общество публичное', '2020-06-19 20:59:44'),
@@ -396,7 +397,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (1832, 'ЮниСервис Капитал UniService Capital ООО \"Юнисервис Капитал\" Unicervice Capital LLC  Unicervice Capital LLC  Unicervice Capital LLC  Uniservice Capital LLC  Uniservice Capital LLC  Unicervice Capital LLC', 'capital llc unicervice uniservice капитал ооо юнисервис', '2020-06-19 20:59:45'),
 (1835, 'КБ Кедр Kedr Commercial Bank Публичное акционерное общество коммерческий банк «КЕДР» KEDR Public Joint-Stock Company Commercial Bank    ', ' bank commercial company jointstock kedr public акционерное банк кб кедр коммерческий общество публичное', '2020-06-19 20:59:45'),
 (1841, 'МГ Групп MG Group Общество с ограниченной ответственностью \"МГ групп\" \"MG Group\" LLC', 'group llc mg групп мг общество ограниченной ответственностью с', '2020-06-19 20:59:45'),
-(1843, 'ИБГ НИКойл IBG NIKoil Инвестиционно-банковская группа НИКойл Investment Banking Group NIKoil', 'banking group ibg investment nikoil группа ибг инвестиционнобанковская никойл', '2020-06-19 20:59:45'),
+(1843, 'ИБГ НИКойл IBG NIKoil Инвестиционно-банковская группа НИКойл Investment Banking Group NIKoil', 'banking group ibg investment nikoil группа ибг инвестиционнобанковская никойл', '2020-06-19 20:59:45');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (1849, 'КАМАБАНК Kamabank КАМАБАНК Kamabank', 'kamabank камабанк', '2020-06-19 20:59:45'),
 (1850, 'РИГрупп-Финанс RIGroup Finance Международный банк экономического сотрудничества RIGroup Finance Investment Company', 'company finance investment rigroup банк международный ригруппфинанс сотрудничества экономического', '2020-06-19 20:59:45'),
 (1852, 'АГРОПРОМКРЕДИТ КБ Agropromcredit Bank АКЦИОНЕРНОЕ ОБЩЕСТВО КОММЕРЧЕСКИЙ БАНК «АГРОПРОМКРЕДИТ» Joint-Stock Commercial bank \"Agropromcredit\"  Joint-Stock Commercial Bank AGROPROMCREDIT BANK (Open Joint-Stock Company)  Joint-Stock Commercial Bank AGROPROMCREDIT BANK (Open Joint-Stock Company)', 'agropromcredit bank commercial company jointstock open агропромкредит акционерное банк кб коммерческий общество', '2020-06-19 20:59:45'),
@@ -640,7 +642,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (3834, 'NautaDutilh N.V. NautaDutilh N.V. NautaDutilh NautaDutilh', 'nautadutilh nv', '2020-06-19 20:59:45'),
 (3846, 'АКБ ИНКАРОБАНК INCAROBANK АКЦИОНЕРНЫЙ КОММЕРЧЕСКИЙ БАНК «ИНКАРОБАНК» (ЗАКРЫТОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО) Joint Stock Commercial Bank \"INKAROBANK\"', 'bank commercial incarobank inkarobank joint stock акб акционерное акционерный банк закрытое инкаробанк коммерческий общество', '2020-06-19 20:59:45'),
 (3848, 'Slovenska Sporitelna Slovenska Sporitelna Slovenska Sporitelna, a. s. Slovenska Sporitelna, a. s.', 'a s slovenska sporitelna', '2020-06-19 20:59:45'),
-(3878, 'НП МРС NP ICS Некоммерческое партнерство «Межбанковская Расчетная Система» Noncommercial partnership \"Interbank Clearing System\"', 'clearing ics interbank noncommercial np partnership system межбанковская мрс некоммерческое нп партнерство расчетная система', '2020-06-19 20:59:45'),
+(3878, 'НП МРС NP ICS Некоммерческое партнерство «Межбанковская Расчетная Система» Noncommercial partnership \"Interbank Clearing System\"', 'clearing ics interbank noncommercial np partnership system межбанковская мрс некоммерческое нп партнерство расчетная система', '2020-06-19 20:59:45');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (3879, 'Blackstone Capital Blackstone Capital  Blackstone Capital', 'blackstone capital', '2020-06-19 20:59:45'),
 (3890, 'Государственный центральный депозитарий ценных бумаг (Узбекистан) Central Securities Depository Государственный центральный депозитарий ценных бумаг(Узбекистан) Central Securities Depository (Uzbekistan)', 'central depository securities uzbekistan бумаг бумагузбекистан государственный депозитарий узбекистан ценных центральный', '2020-06-19 20:59:45'),
 (3904, 'КБ Руснарбанк Rusnarbank Акционерное общество Коммерческий банк \"Русский Народный Банк\" Joint stock company Commercial bank \"RUSNARBANK\"', 'bank commercial company joint rusnarbank stock акционерное банк кб коммерческий народный общество руснарбанк русский', '2020-06-19 20:59:45'),
@@ -954,7 +957,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (8413, 'УРСА Финанс URSA Finans УРСА Финанс URSA Finans', 'finans ursa урса финанс', '2020-06-19 20:59:45'),
 (8435, 'Банк Восток Bank Vostok ПАО \"Банк Восток\" Bank Vostok PJSC', 'bank pjsc vostok банк восток пао', '2020-06-19 20:59:45'),
 (8453, 'Renaissance Group Renaissance Group Renaissance Group (Renaissance Capital) Renaissance Group (Renaissance Capital)', 'capital group renaissance', '2020-06-19 20:59:45'),
-(8513, 'ФинансСекьюритиз FinanceSecurities ООО \"ФинансСекьюритиз\" ', ' financesecurities ооо финанссекьюритиз', '2020-06-19 20:59:45'),
+(8513, 'ФинансСекьюритиз FinanceSecurities ООО \"ФинансСекьюритиз\" ', ' financesecurities ооо финанссекьюритиз', '2020-06-19 20:59:45');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (8556, 'БСБ Банк BSB Bank ЗАО \"БелСвиссБанк\" JSC “BelSwissBank”  JSC “BelSwissBank”  JSC “BelSwissBank”', 'bank belswissbank bsb jsc банк белсвиссбанк бсб зао', '2020-06-19 20:59:45'),
 (8606, 'Banco Desio e della Brianza Banco Desio e della Brianza Banco Desio e della Brianza Societa per azioni Banco Desio e della Brianza Societa per azioni', 'azioni banco brianza della desio e per societa', '2020-06-19 20:59:45'),
 (8612, 'East-West United Bank East-West United Bank East-West United Bank S.A. East-West United Bank S.A.', 'bank eastwest sa united', '2020-06-19 20:59:45'),
@@ -1243,7 +1247,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (14121, 'Allen & Overy Legal Services Allen & Overy Legal Services Филиал компании с неограниченной ответственностью \"Аллен энд Овери Легал Сервисиз\" Allen & Overy Legal Services', ' allen legal overy services аллен компании легал неограниченной овери ответственностью с сервисиз филиал энд', '2020-06-19 20:59:45'),
 (14134, 'Kuveyt Turk Participation Bank Kuveyt Turk Participation Bank Kuveyt Turk Participation Bank Kuveyt Turk Participation Bank Inc.', 'bank inc kuveyt participation turk', '2020-06-19 20:59:45'),
 (14135, 'Liquidity Managenent House Liquidity Managenent House Liquidity Management House for Investment K.S.C.C Liquidity Management House for Investment K.S.C.C', 'for house investment kscc liquidity management managenent', '2020-06-19 20:59:45'),
-(14153, 'Baker Botts Baker Botts Филиал партнерства с ограниченной ответственностью «Бейкер Боттс Л.Л.П.» (США) в г.Москве ', ' baker botts бейкер боттс в гмоскве ллп ограниченной ответственностью партнерства с сша филиал', '2020-06-19 20:59:45'),
+(14153, 'Baker Botts Baker Botts Филиал партнерства с ограниченной ответственностью «Бейкер Боттс Л.Л.П.» (США) в г.Москве ', ' baker botts бейкер боттс в гмоскве ллп ограниченной ответственностью партнерства с сша филиал', '2020-06-19 20:59:45');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (14154, 'TP ICAP plc TP ICAP plc TP ICAP plc TP ICAP plc', 'icap plc tp', '2020-06-19 20:59:45'),
 (14161, 'JP Morgan Structured Products JP Morgan Structured Products JP Morgan Structured Products B.V. JP Morgan Structured Products B.V.', 'bv jp morgan products structured', '2020-06-19 20:59:45'),
 (14162, 'UniCredit Bank AG UniCredit Bank AG UniCredit Bank AG UniCredit Bank AG', 'ag bank unicredit', '2020-06-19 20:59:45'),
@@ -1542,7 +1547,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (24307, 'U.S. Bancorp U.S. Bancorp U.S. Bancorp U.S. Bancorp', 'bancorp us', '2020-06-19 20:59:45'),
 (24319, 'Banco Santander Banco Santander Banco Santander S.A. Banco Santander S.A.', 'banco sa santander', '2020-06-19 20:59:45'),
 (24347, 'Sumitomo Mitsui FG Sumitomo Mitsui FG Sumitomo Mitsui Financial Group, Inc Sumitomo Mitsui Financial Group, Inc', 'fg financial group inc mitsui sumitomo', '2020-06-19 20:59:45'),
-(24363, 'Barclays Barclays Barclays Plc Barclays Plc  Barclays Plc  Barclays Plc  Barclays Plc  Barclays Plc', 'barclays plc', '2020-06-19 20:59:45'),
+(24363, 'Barclays Barclays Barclays Plc Barclays Plc  Barclays Plc  Barclays Plc  Barclays Plc  Barclays Plc', 'barclays plc', '2020-06-19 20:59:45');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (24375, 'Bank of Montreal Bank of Montreal Bank of Montreal Bank of Montreal', 'bank montreal of', '2020-06-19 20:59:45'),
 (24377, 'Target Target Target Corporation Target Corporation', 'corporation target', '2020-06-19 20:59:45'),
 (24387, 'Mizuho Financial Group Mizuho Financial Group Mizuho Financial Group Inc Mizuho Financial Group Inc', 'financial group inc mizuho', '2020-06-19 20:59:45'),
@@ -1860,7 +1866,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (35067, 'Credit Suisse (London Branch) Credit Suisse (London Branch) Credit Suisse AG (London) Branch Credit Suisse AG (London) Branch', 'ag branch credit london suisse', '2020-06-19 20:59:45'),
 (35207, 'Banco BTG Pactual Banco BTG Pactual Banco BTG Pactual S.A. Banco BTG Pactual S.A.', 'banco btg pactual sa', '2020-06-19 20:59:46'),
 (35261, 'Unicredit Bank Czech Republic and Slovakia Unicredit Bank Czech Republic and Slovakia UniCredit Czech Republic and Slovakia a.s. UniCredit Czech Republic and Slovakia a.s.', 'and as bank czech republic slovakia unicredit', '2020-06-19 20:59:46'),
-(35271, 'ТРП-Финансовые Решения  ЗАО «ТРП-ФР» ', ' зао решения трпфинансовые трпфр', '2020-06-19 20:59:46'),
+(35271, 'ТРП-Финансовые Решения  ЗАО «ТРП-ФР» ', ' зао решения трпфинансовые трпфр', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (35333, 'Bankia Bankia Bankia S.A. Bankia S.A.', 'bankia sa', '2020-06-19 20:59:46'),
 (35335, 'Regionala Investiciju Banka Regionala Investiciju Banka Regionala Investiciju Banka AS Regionala Investiciju Banka AS', 'as banka investiciju regionala', '2020-06-19 20:59:46'),
 (35349, 'Banka Kombetare Tregtare Banka Kombetare Tregtare JSC \"Banka Kombetare Tregtare\" JSC \"Banka Kombetare Tregtare\"  JSC \"Banka Kombetare Tregtare\"  JSC \"Banka Kombetare Tregtare\"', 'banka jsc kombetare tregtare', '2020-06-19 20:59:46'),
@@ -2220,7 +2227,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (40913, 'MasterLink Securities MasterLink Securities Masterlink Securities Corp Masterlink Securities Corp', 'corp masterlink securities', '2020-06-19 20:59:46'),
 (40939, 'Qilu International Qilu International Qilu International Holdings Limited Qilu International Holdings Limited', 'holdings international limited qilu', '2020-06-19 20:59:46'),
 (40943, 'GF Securities GF Securities GF Securities Company Limited GF Securities Company Limited', 'company gf limited securities', '2020-06-19 20:59:46'),
-(40945, 'Industrial Securities Industrial Securities Industrial Securities Co Ltd Industrial Securities Co Ltd', 'co industrial ltd securities', '2020-06-19 20:59:46'),
+(40945, 'Industrial Securities Industrial Securities Industrial Securities Co Ltd Industrial Securities Co Ltd', 'co industrial ltd securities', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (40963, 'AUDIS AUDIS AUDIS AZ s.r.o. AUDIS AZ s.r.o.', 'audis az sro', '2020-06-19 20:59:46'),
 (40979, 'National Bank of Canada National Bank of Canada National Bank of Canada National Bank of Canada', 'bank canada national of', '2020-06-19 20:59:46'),
 (40983, 'Trea Capital Partners Trea Capital Partners Trea Capital Partners S.A. Trea Capital Partners S.A.', 'capital partners sa trea', '2020-06-19 20:59:46'),
@@ -2539,7 +2547,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (50179, 'Philippi Prietocarrizosa Ferrero DU & Uria Philippi Prietocarrizosa Ferrero DU & Uria Philippi Prietocarrizosa Ferrero DU & Uria Philippi Prietocarrizosa Ferrero DU & Uria', ' du ferrero philippi prietocarrizosa uria', '2020-06-19 20:59:46'),
 (50181, 'Minter Ellison Lawyers Minter Ellison Lawyers Minter Ellison Lawyers Minter Ellison Lawyers', 'ellison lawyers minter', '2020-06-19 20:59:46'),
 (50183, 'Ferchiou & Associes Ferchiou & Associes Ferchiou & Associes Ferchiou & Associes', ' associes ferchiou', '2020-06-19 20:59:46'),
-(50187, 'JunZeJun Law Offices JunZeJun Law Offices JunZeJun Law Offices JunZeJun Law Offices', 'junzejun law offices', '2020-06-19 20:59:46'),
+(50187, 'JunZeJun Law Offices JunZeJun Law Offices JunZeJun Law Offices JunZeJun Law Offices', 'junzejun law offices', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (50189, 'Addleshaw Goddard Addleshaw Goddard Addleshaw Goddard Addleshaw Goddard', 'addleshaw goddard', '2020-06-19 20:59:46'),
 (50191, 'Travers Thorp Alberga Travers Thorp Alberga Travers Thorp Alberga Travers Thorp Alberga', 'alberga thorp travers', '2020-06-19 20:59:46'),
 (50195, 'Taboglu & Demirhan Taboglu & Demirhan Taboglu & Demirhan Taboglu & Demirhan', ' demirhan taboglu', '2020-06-19 20:59:46'),
@@ -2845,7 +2854,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (58915, 'La Banque Postale Home Loan SFH La Banque Postale Home Loan SFH La Banque Postale Home Loan SFH La Banque Postale Home Loan SFH', 'banque home la loan postale sfh', '2020-06-19 20:59:46'),
 (58933, 'AllBright Law Offices AllBright Law Offices AllBright Law Offices AllBright Law Offices', 'allbright law offices', '2020-06-19 20:59:46'),
 (58965, 'Mediocredito Italiano Mediocredito Italiano Mediocredito Italiano e una Banca del Grupo Intesa Sabpaolo Mediocredito Italiano e una Banca del Grupo Intesa Sabpaolo', 'banca del e grupo intesa italiano mediocredito sabpaolo una', '2020-06-19 20:59:46'),
-(58977, 'Orient Securities International Holdings Orient Securities International Holdings Orient Securities International Holdings Limited\r\n Orient Securities International Holdings Limited\r\n', ' holdings international limited orient securities', '2020-06-19 20:59:46'),
+(58977, 'Orient Securities International Holdings Orient Securities International Holdings Orient Securities International Holdings Limited\r\n Orient Securities International Holdings Limited\r\n', ' holdings international limited orient securities', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (59061, 'PwC (Global) PwC (Global) PwC PwC', 'global pwc', '2020-06-19 20:59:46'),
 (59135, 'Eversheds Eversheds Eversheds LLP Eversheds LLP', 'eversheds llp', '2020-06-19 20:59:46'),
 (59143, 'Cabanellas Etchebarne Kelly Cabanellas Etchebarne Kelly Cabanellas Etchebarne Kelly Cabanellas Etchebarne Kelly', 'cabanellas etchebarne kelly', '2020-06-19 20:59:46'),
@@ -3137,7 +3147,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (69032, 'Banca di Credito Cooperativo San Michele di Caltanissetta e Pietraperzia (BCC San Michele) Banca di Credito Cooperativo San Michele di Caltanissetta e Pietraperzia (BCC San Michele) BANCA DI CREDITO COOPERATIVO SAN MICHELE di Caltanissetta e Pietraperzia Societa Cooperativa per azioni BANCA DI CREDITO COOPERATIVO SAN MICHELE di Caltanissetta e Pietraperzia Societa Cooperativa per azioni', 'azioni banca bcc caltanissetta cooperativa cooperativo credito di e michele per pietraperzia san societa', '2020-06-19 20:59:46'),
 (69100, 'Mizuho Securities Mizuho Securities Mizuho Securities Co LTD Mizuho Securities Co LTD', 'co ltd mizuho securities', '2020-06-19 20:59:46'),
 (69102, 'Sparkasse Oberosterreich Sparkasse Oberosterreich Allgemeine Sparkasse Oberoesterreich Bank AG Allgemeine Sparkasse Oberoesterreich Bank AG', 'ag allgemeine bank oberoesterreich oberosterreich sparkasse', '2020-06-19 20:59:46'),
-(69126, 'Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia (BCC Cascia) Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia (BCC Cascia) Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia Societa Cooperativa Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia Societa Cooperativa', 'banca bcc cascia cooperativa cooperativo credito di fiorentino societa valdarno', '2020-06-19 20:59:46'),
+(69126, 'Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia (BCC Cascia) Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia (BCC Cascia) Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia Societa Cooperativa Banca di Credito Cooperativo Valdarno Fiorentino Banca di Cascia Societa Cooperativa', 'banca bcc cascia cooperativa cooperativo credito di fiorentino societa valdarno', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (69130, 'Juris Corp Juris Corp Juris Corp Juris Corp', 'corp juris', '2020-06-19 20:59:46'),
 (69136, 'Jiangsu Suyuan Law Firm Jiangsu Suyuan Law Firm Jiangsu Suyuan Law Firm Jiangsu Suyuan Law Firm', 'firm jiangsu law suyuan', '2020-06-19 20:59:46'),
 (69138, 'Tahota Law Firm Tahota Law Firm Tahota Law Firm Tahota Law Firm', 'firm law tahota', '2020-06-19 20:59:46'),
@@ -3421,7 +3432,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (85019, 'Raiffeisen Switzerland B.V. Raiffeisen Switzerland B.V. Raiffeisen Switzerland B.V. Raiffeisen Switzerland B.V.', 'bv raiffeisen switzerland', '2020-06-19 20:59:46'),
 (85071, 'Alpha Star Holding III Alpha Star Holding III Alpha Star Holding III Alpha Star Holding III', 'alpha holding iii star', '2020-06-19 20:59:46'),
 (85077, 'CITIC Securities Company CITIC Securities Company CITIC Securities Company Limited CITIC Securities Company Limited', 'citic company limited securities', '2020-06-19 20:59:46'),
-(85123, 'Founder Securities Founder Securities Founder Securities Co., Ltd Founder Securities Co., Ltd', 'co founder ltd securities', '2020-06-19 20:59:46'),
+(85123, 'Founder Securities Founder Securities Founder Securities Co., Ltd Founder Securities Co., Ltd', 'co founder ltd securities', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (85255, 'CSDC CSDC China Securities Depository and Clearing Corporation Limited (CSDC) China Securities Depository and Clearing Corporation Limited (CSDC)', 'and china clearing corporation csdc depository limited securities', '2020-06-19 20:59:46'),
 (85395, 'SBICAP Securities SBICAP Securities SBICAP Securities Limited SBICAP Securities Limited', 'limited sbicap securities', '2020-06-19 20:59:46'),
 (85453, 'TFS TFS Top Forward Science Top Forward Science', 'forward science tfs top', '2020-06-19 20:59:46'),
@@ -3715,7 +3727,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (100627, 'GlobaLex Chambers GlobaLex Chambers GlobaLex Chambers GlobaLex Chambers', 'chambers globalex', '2020-06-19 20:59:46'),
 (100631, 'The Capital Law Office The Capital Law Office The Capital Law Office Limited The Capital Law Office Limited', 'capital law limited office the', '2020-06-19 20:59:46'),
 (100919, 'Hypoe NOE Landesbank Hypoe NOE Landesbank Hypoe NOE Landesbank fuer Niederoesterreich und Wien AG Hypoe NOE Landesbank fuer Niederoesterreich und Wien AG', 'ag fuer hypoe landesbank niederoesterreich noe und wien', '2020-06-19 20:59:46'),
-(100963, 'BNP Paribas Securities Services France Paris BNP Paribas Securities Services France Paris BNP Paribas Securities Services France Paris BNP Paribas Securities Services France Paris', 'bnp france paribas paris securities services', '2020-06-19 20:59:46'),
+(100963, 'BNP Paribas Securities Services France Paris BNP Paribas Securities Services France Paris BNP Paribas Securities Services France Paris BNP Paribas Securities Services France Paris', 'bnp france paribas paris securities services', '2020-06-19 20:59:46');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (100965, 'Citibank Europe Citibank Europe Citibank Europe plc Citibank Europe plc', 'citibank europe plc', '2020-06-19 20:59:46'),
 (100967, 'Bank Degroof Petercam Bank Degroof Petercam Bank Degroof Petercam S.A. Bank Degroof Petercam S.A.', 'bank degroof petercam sa', '2020-06-19 20:59:46'),
 (101149, 'ITI Capital ITI Capital ITI Capital Ltd ITI Capital Ltd', 'capital iti ltd', '2020-06-19 20:59:46'),
@@ -4014,7 +4027,8 @@ INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `upd
 (131811, 'Societe Generale Asia Societe Generale Asia Societe Generale Asia Limited Societe Generale Asia Limited', 'asia generale limited societe', '2020-06-19 20:59:47'),
 (131815, 'MG Law Office MG Law Office MG Law Office LLC MG Law Office LLC', 'law llc mg office', '2020-06-19 20:59:47'),
 (131837, 'Kinstellar Hungary Kinstellar Hungary Andreko Kinstellar Ugyvedi Iroda Andreko Kinstellar Ugyvedi Iroda', 'andreko hungary iroda kinstellar ugyvedi', '2020-06-19 20:59:47'),
-(131861, 'SinoPac Securities Asia SinoPac Securities Asia SinoPac Securities (Asia) Limited SinoPac Securities (Asia) Limited', 'asia limited securities sinopac', '2020-06-19 20:59:47'),
+(131861, 'SinoPac Securities Asia SinoPac Securities Asia SinoPac Securities (Asia) Limited SinoPac Securities (Asia) Limited', 'asia limited securities sinopac', '2020-06-19 20:59:47');
+INSERT IGNORE INTO `old`.`participants_suggest` (`id`, `names`, `allwords`, `updated_at`) VALUES
 (131869, 'Citigroup Global Markets Asia Citigroup Global Markets Asia Citigroup Global Markets Asia Ltd Citigroup Global Markets Asia Ltd', 'asia citigroup global ltd markets', '2020-06-19 20:59:47'),
 (131899, 'Active Underwriting Active Underwriting Active Underwriting Ltd Active Underwriting Ltd', 'active ltd underwriting', '2020-06-19 20:59:47'),
 (131909, 'J&T IB and Capital Markets J&T IB and Capital Markets J&T IB and Capital Markets J&T IB and Capital Markets', 'and capital ib jt markets', '2020-06-19 20:59:47'),

@@ -378,3 +378,45 @@ Sphinx мы пока не ставили, как переходный вариа
 с много памятью - результаты одинаковые.
 
 ## Docker <a name="docker"></a>
+
+#### Поднять сервис можно командой:
+
+```
+docker-compose up otus_rdbms_201910_sergei_baranov_w13
+```
+
+#### Остановить:
+
+```
+docker-compose stop otus_rdbms_201910_sergei_baranov_w13
+```
+
+#### При проблемах вида
+"Problem while dropping database.
+Can't remove database directory ... Please remove it manually."
+и т.п.:
+
+- Открываем терминал в контейнере:
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w13 /bin/sh
+```
+
+- и в терминале в контейнере:
+
+```
+cd /var/lib/mysql
+rm -R old
+```
+
+#### Для подключения к БД используйте команду:
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w13 mysql -u root -p12345
+```
+
+#### Для использования в клиентских приложениях можно использовать команду:
+
+```
+mysql -u root -p12345 --host=127.0.0.1 --port=3309 --protocol=tcp
+```

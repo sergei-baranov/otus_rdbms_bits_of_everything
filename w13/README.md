@@ -369,6 +369,27 @@ Sphinx мы пока не ставили, как переходный вариа
       FROM old.participants_suggest_900 WHERE MATCH(`allwords`) AGAINST('акционерн* банк*' IN BOOLEAN MODE)
     ) t WHERE t.`rel` > 1 ORDER BY t.`rel` DESC;
     /* 200 строк 10 ms */
+    
+И через mysqlslap
+
+    feynman@feynman-desktop:~$ mysqlslap --concurrency=50 --iterations=200 --query="SELECT id, allwords, rel FROM (SELECT id, allwords, MATCH(allwords) AGAINST('citigroup*' IN BOOLEAN MODE) as rel FROM old.participants_suggest_8 WHERE MATCH(allwords) AGAINST('citigroup*' IN BOOLEAN MODE) ) t WHERE t.rel > 1 ORDER BY t.rel DESC" --password=*** --create-schema=old
+    mysqlslap: [Warning] Using a password on the command line interface can be insecure.
+    Benchmark
+            Average number of seconds to run all queries: 0.012 seconds
+            Minimum number of seconds to run all queries: 0.008 seconds
+            Maximum number of seconds to run all queries: 0.019 seconds
+            Number of clients running queries: 50
+            Average number of queries per client: 1
+    
+    feynman@feynman-desktop:~$ mysqlslap --concurrency=50 --iterations=200 --query="SELECT id, allwords, rel FROM (SELECT id, allwords, MATCH(allwords) AGAINST('citigroup*' IN BOOLEAN MODE) as rel FROM old.participants_suggest_900 WHERE MATCH(allwords) AGAINST('citigroup*' IN BOOLEAN MODE) ) t WHERE t.rel > 1 ORDER BY t.rel DESC" --password=*** --create-schema=old
+    mysqlslap: [Warning] Using a password on the command line interface can be insecure.
+    Benchmark
+            Average number of seconds to run all queries: 0.012 seconds
+            Minimum number of seconds to run all queries: 0.008 seconds
+            Maximum number of seconds to run all queries: 0.018 seconds
+            Number of clients running queries: 50
+            Average number of queries per client: 1
+
 
 
 На малых объёмах (таблица всего 4К записей),<br/>

@@ -508,6 +508,7 @@ mysql> SELECT * FROM INFORMATION_SCHEMA.OPTIMIZER_TRACE;
     Otherwise, the value is 0.
     
 Но я же под root-ом? ...
+Видимо, какие-то баги мускула по поводу JSON_TABLE и OPTIMIZER_TRACE.
 
 Ну я погуглил, но ответа не нашёл (:
 Почитал querytrace_1... интересно )).

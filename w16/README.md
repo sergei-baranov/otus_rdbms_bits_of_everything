@@ -455,6 +455,8 @@ mysql> SET OPTIMIZER_TRACE="enabled=off";
 Query OK, 0 rows affected (0,00 sec)
 ```
 
+Получил файл querytrace_1, приложил к д/з.
+
 Второй запрос:
 
 ```
@@ -508,6 +510,7 @@ mysql> SELECT * FROM INFORMATION_SCHEMA.OPTIMIZER_TRACE;
 Но я же под root-ом? ...
 
 Ну я погуглил, но ответа не нашёл (:
+Почитал querytrace_1... интересно )).
 
 На этом всё.
 Надеюсь, достаточно для того, чтобы засчитать д/з.

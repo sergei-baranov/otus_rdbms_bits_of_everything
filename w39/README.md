@@ -1213,6 +1213,11 @@ SECONDARY превратился в PRIMARY, поскольку 127.0.0.1:27001 
 $ sudo kill 4848
 $ sudo kill 5326
 
+$ sudo free -h
+              всего        занято        свободно      общая  буф./врем.   доступно
+Память:         31G         18G        2,7G         20M        9,8G         12G
+Подкачка:        8,0G        512K        8,0G
+
 mongos> use tsq
 switched to db tsq
 mongos> db.prices.find({id_pe:{$in:[3100000162, 3100000359, 1700000435, 2900000666]}}).limit(100)

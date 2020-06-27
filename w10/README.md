@@ -18,7 +18,7 @@
 
 https://www.notion.so/38753f1d19724f12b66a0b5a8a70539a?v=4d42c9ac71014e31b80cae658e51ccac&p=6cef34d403234183a3aacd3a3485ecac
 
-## 1. Напишите запрос по своей базе с left join <a name="left_join"></a>
+## 1. Напишите запрос по своей базе с inner join <a name="inner_join"></a>
 
 ```
 /*
@@ -62,7 +62,7 @@ mysql> SELECT
 
 ```
 
-## 2. Напишите запрос по своей базе с inner join <a name="inner_join"></a>
+## 2. Напишите запрос по своей базе с left join <a name="left_join"></a>
 
 ```
 /*

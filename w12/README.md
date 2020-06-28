@@ -10,6 +10,7 @@
 3. [case, rollup, grouping, having](#case_rollup_grouping_having)
 4. [валюта в группировку, MAX, убрать HAVING-ом в GROUPING() = 1 по валютам](#cost1)
 5. [то же с подсчётом торговых дней](#cost2)
+6. [docker](#docker)
 
 
 ## 1. case <a name="case"></a>
@@ -413,3 +414,74 @@ ORDER BY `max_wl_currency_day_cost` DESC
 
 Это всё бессмысленно без учёта пропусков в торгах по парам и без курса валют,
 просто пример владения синтаксисом.
+
+## 6. docker <a name="docker"></a>
+
+сам себе: mysqldump
+```
+sudo mysqldump bonds  -p*** --single-transaction --tables emissions --where="id in (SELECT DISTINCT emission_id FROM tsq.prices WHERE tsq.prices.id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/emissions.sql
+
+sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables prices --where="id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds)" > ~/prices.sql
+
+sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables volumes --where="id in (select id from tsq.prices where id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/volumes.sql
+```
+
+#### Поднять сервис можно командой:
+
+```
+docker-compose up otus_rdbms_201910_sergei_baranov_w12
+```
+
+#### Остановить:
+
+```
+docker-compose stop otus_rdbms_201910_sergei_baranov_w12
+```
+
+#### При проблемах вида
+"Problem while dropping database.
+Can't remove database directory ... Please remove it manually."
+и т.п.:
+
+- Открываем терминал в контейнере:
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w12 /bin/sh
+```
+
+- и в терминале в контейнере:
+
+```
+cd /var/lib/mysql
+rm -R common
+rm -R bonds
+rm -R tsq
+```
+
+#### Для подключения к БД используйте команду:
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w12 mysql -u root -p12345
+```
+
+или, если не пускает, то
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w12 mysql -uroot
+```
+
+то же из sh
+
+```
+docker-compose exec otus_rdbms_201910_sergei_baranov_w12 /bin/sh
+# mysql -uroot
+mysql>
+```
+
+```
+SELECT * FROM tsq.dz12p1;
+SELECT * FROM tsq.dz12p2;
+SELECT * FROM tsq.dz12p3;
+SELECT * FROM tsq.dz12p4;
+SELECT * FROM tsq.dz12p5;
+```

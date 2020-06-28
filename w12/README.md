@@ -459,9 +459,10 @@ docker-compose exec otus_rdbms_201910_sergei_baranov_w12 /bin/sh
 
 ```
 cd /var/lib/mysql
-rm -R common
-rm -R bonds
+rm -R portfolio
 rm -R tsq
+rm -R bonds
+rm -R common
 ```
 
 #### Для подключения к БД используйте команду:

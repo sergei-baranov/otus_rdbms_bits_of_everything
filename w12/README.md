@@ -70,7 +70,7 @@ SELECT
   CASE GROUPING(`prsn`.`id`)
     WHEN 1 THEN 'Все юзеры'
     ELSE MAX(`prsn`.`fname`)
-  END AS `ename`,
+  END AS `uname`,
   CASE GROUPING(`exch`.`id`)
     WHEN 1 THEN 'Все биржи'
     ELSE CONCAT((SUBSTRING(MAX(`exch`.`name`), 1, 8)), '...')
@@ -90,7 +90,7 @@ WITH ROLLUP
 
 ```
 +-------------------+---------------------+------------------+
-| ename             | ename               | quotations_count |
+| uname             | ename               | quotations_count |
 +-------------------+---------------------+------------------+
 | Николай           | Шэньчжэн...         |                5 |
 | Николай           | Корейска...         |              117 |
@@ -169,7 +169,7 @@ SELECT
   CASE GROUPING(`prsn`.`id`)
     WHEN 1 THEN 'Все юзеры'
     ELSE MAX(`prsn`.`fname`)
-  END AS `ename`,
+  END AS `uname`,
   CASE GROUPING(`exch`.`id`)
     WHEN 1 THEN 'Все биржи'
     ELSE CONCAT((SUBSTRING(MAX(`exch`.`name`), 1, 8)), '...')
@@ -192,7 +192,7 @@ HAVING sum_volume_money > 0
 
 ```
 +-------------------+---------------------+----------+------------------+
-| ename             | ename               | qt_count | sum_volume_money |
+| uname             | ename               | qt_count | sum_volume_money |
 +-------------------+---------------------+----------+------------------+
 | Николай           | BYMA (ра...         |        2 |             9000 |
 | Николай           | Все биржи           |     4255 |             9000 |
@@ -421,9 +421,15 @@ ORDER BY `max_wl_currency_day_cost` DESC
 ```
 sudo mysqldump bonds  -p*** --single-transaction --tables emissions --where="id in (SELECT DISTINCT emission_id FROM tsq.prices WHERE tsq.prices.id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/emissions.sql
 
+sudo mysqldump tsq -p*** --single-transaction --tables exchanges > ~/exchanges.sql
+
 sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables prices --where="id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds)" > ~/prices.sql
 
 sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables volumes --where="id in (select id from tsq.prices where id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/volumes.sql
+
+sudo mysqldump tsq -p*** --single-transaction --tables pairs --where="id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds)" > ~/pairs.sql
+
+sudo mysqldump portfolio -p*** --single-transaction --tables watchlist_bonds > ~/watchlist_bonds.sql
 ```
 
 #### Поднять сервис можно командой:
@@ -478,10 +484,47 @@ docker-compose exec otus_rdbms_201910_sergei_baranov_w12 /bin/sh
 mysql>
 ```
 
+В init.sql прописаны view-хи portfolio.dz12p1 ... portfolio.dz12p5
+(SQL SECURITY INVOKER)
+
 ```
-SELECT * FROM tsq.dz12p1;
-SELECT * FROM tsq.dz12p2;
-SELECT * FROM tsq.dz12p3;
-SELECT * FROM tsq.dz12p4;
-SELECT * FROM tsq.dz12p5;
+mysql> SET NAMES utf8mb4;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM portfolio.dz12p1;
++------------------+--------------+------------------+
+| fname            | has_volumes  | quotations_count |
++------------------+--------------+------------------+
+| Владимир | with volumes |              147 |
+| Владимир | no volumes   |             4248 |
+| Денис       | with volumes |              159 |
+| Денис       | no volumes   |             3664 |
+| Елена       | with volumes |               78 |
+| Елена       | no volumes   |             3546 |
+| Николай   | with volumes |              152 |
+| Николай   | no volumes   |             4103 |
+| Сергей     | with volumes |               37 |
+| Сергей     | no volumes   |             3814 |
++------------------+--------------+------------------+
+10 rows in set (0.07 sec)
+```
+
+```
+SELECT * FROM portfolio.dz12p2;
+/* всё как выше в ответах на запросы */
+```
+
+```
+SELECT * FROM portfolio.dz12p3;
+/* всё как выше в ответах на запросы */
+```
+
+```
+SELECT * FROM portfolio.dz12p4;
+/* всё как выше в ответах на запросы */
+```
+
+```
+SELECT * FROM portfolio.dz12p5;
+/* всё как выше в ответах на запросы */
 ```

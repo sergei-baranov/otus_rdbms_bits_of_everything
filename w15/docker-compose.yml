@@ -6,10 +6,10 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD='12345'
     command:
-      --init-file /init.sql
+      --init-file /init3.sql
     volumes:
       - data:/var/lib/mysql
-      - ./init.sql:/init.sql
+      - ./init.sql:/init3.sql
       - ./custom.conf:/etc/mysql/conf.d
     expose:
       - "3306"

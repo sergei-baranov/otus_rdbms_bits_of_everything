@@ -430,6 +430,20 @@ sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables v
 sudo mysqldump tsq -p*** --single-transaction --tables pairs --where="id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds)" > ~/pairs.sql
 
 sudo mysqldump portfolio -p*** --single-transaction --tables watchlist_bonds > ~/watchlist_bonds.sql
+
+
+
+
+sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables spreads --where="id in (select id from tsq.prices where id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/_tsq_spreads.sql
+
+sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables risks_metrics --where="id in (select id from tsq.prices where id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/_tsq_risks_metrics.sql
+
+sudo mysqldump tsq -p*** --extended-insert=FALSE --single-transaction --tables yields --where="id in (select id from tsq.prices where id_pe IN (SELECT DISTINCT pair_id FROM portfolio.watchlist_bonds))" > ~/_tsq_yields.sql
+
+sudo mysqldump portfolio -p*** --single-transaction --tables watchlist_instruments > ~/_watchlist_instruments.sql
+sudo mysqldump portfolio -p*** --single-transaction --tables watchlist_equities > ~/_watchlist_equities.sql
+sudo mysqldump portfolio -p*** --single-transaction --tables watchlist_depts > ~/_watchlist_depts.sql
+sudo mysqldump portfolio -p*** --single-transaction --tables watchlist_bonds > ~/_watchlist_bonds.sql
 ```
 
 #### Поднять сервис можно командой:

@@ -16,13 +16,13 @@ USE `otus_tz`;
 CREATE TABLE IF NOT EXISTS `otus_tz`.`users`(
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`) USING BTREE
-) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/';
+) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci /*DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/'*/;
 
 CREATE TABLE IF NOT EXISTS `otus_tz`.`courses`(
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/';
+) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci /*DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/'*/;
 
 CREATE TABLE IF NOT EXISTS `otus_tz`.`groups` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `otus_tz`.`groups` (
   `finish_date` DATE DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   CONSTRAINT `groups_refs2_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/';
+) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci /*DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/'*/;
 
 CREATE TABLE IF NOT EXISTS `otus_tz`.`invoice` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -51,22 +51,22 @@ CREATE TABLE IF NOT EXISTS `otus_tz`.`invoice` (
   CONSTRAINT `invoice_refs2_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `invoice_refs2_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `invoice_refs2_groups` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/';
+) /*!50100 TABLESPACE `innodb_file_per_table` */ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci /*DATA DIRECTORY='/mysql_tablespaces/sd1t/otus_tz/'*/;
 
 
 DELETE FROM `otus_tz`.`invoice`;
 ALTER TABLE `otus_tz`.`invoice` AUTO_INCREMENT = 1;
 DELETE FROM `otus_tz`.`groups`;
 ALTER TABLE `otus_tz`.`groups` AUTO_INCREMENT = 1;
+/*
 TRUNCATE `otus_tz`.`courses`;
 TRUNCATE `otus_tz`.`users`;
-/*
-or
+*/
 DELETE FROM `otus_tz`.`courses`;
 ALTER TABLE `otus_tz`.`courses` AUTO_INCREMENT = 1;
 DELETE FROM `otus_tz`.`users`;
 ALTER TABLE `otus_tz`.`users` AUTO_INCREMENT = 1;
-*/
+
 /* fill `otus_tz`.`users` */
 INSERT INTO `otus_tz`.`users` SELECT * FROM (
   WITH RECURSIVE nats (n) AS
@@ -310,9 +310,85 @@ DELIMITER ;
 /* fill `otus_tz`.`invoice` */
 CALL `otus_tz`.`fill_invoices`(@rc, @err);
 
-/* допустим для начала попроще: что флаг `full_paid` ставится на завершающий полную оплату счёт
-(на единственный при разовой и последний при частичной) */
+/* DROP INDEX `status_group_user` ON `otus_tz`.`invoice`; */
+ALTER TABLE `otus_tz`.`invoice` ADD INDEX `status_group_user` (`status`, `group_id`, `user_id`) USING BTREE;
 
-/* допустим теперь, что флаг `full_paid` маркирует счёт на оплату курса полностью
-(и в частичных счетах этот флаг не высталяется никогда),
-а в `invoice`.`discount` лежит скидка в деньгах (в абс. значении) */
+/*
+SET @month_ago = NOW() - INTERVAL 1 MONTH;
+SET @today = NOW();
+SET @rownum = 0;
+SELECT
+  @rownum := @rownum + 1 AS `N`,
+  der2.`TITLE`,
+  der2.`PERCENT`,
+  der2.`TOTAL_USERS`
+FROM
+  (SELECT @rownum:=0) t,
+  (
+    with der1 AS (
+      SELECT
+        grp.title,
+        invc.group_id,
+        invc.user_id,
+        SUM((invc.amount + invc.discount)) > grp.price_full as payed_full
+      FROM
+        otus_tz.invoice invc FORCE INDEX (status_group_user)
+        INNER JOIN otus_tz.`groups` grp ON (grp.id = invc.group_id)
+      WHERE
+        invc.`status` = 'payed'
+        AND grp.start_date < @month_ago
+      GROUP BY invc.group_id, invc.user_id
+      ORDER BY NULL
+    )
+    SELECT
+      title AS 'TITLE',
+      round((sum(payed_full)/count(user_id) * 100), 2) as `PERCENT`,
+      count(user_id) as `TOTAL_USERS`
+    FROM
+      der1
+    GROUP BY
+      group_id
+    ORDER BY
+      `TOTAL_USERS` DESC
+  ) as der2
+;
+*/
+/*
+SET @month_ago = NOW() - INTERVAL 1 MONTH;
+SET @today = NOW();
+SET @rownum = 0;
+SELECT
+  @rownum := @rownum + 1 AS `N`,
+  der2.`TITLE`,
+  der2.`PERCENT`,
+  der2.`TOTAL_USERS`
+FROM
+  (SELECT @rownum:=0) t,
+  (
+    SELECT
+      der1.title AS `TITLE`,
+      round((sum(der1.payed_full)/count(der1.user_id) * 100), 2) as `PERCENT`,
+      count(der1.user_id) as `TOTAL_USERS`
+    FROM
+      (
+        SELECT
+          grp.title,
+          invc.group_id,
+          invc.user_id,
+          SUM((invc.amount + invc.discount)) > grp.price_full as payed_full
+        FROM
+          otus_tz.invoice invc FORCE INDEX (status_group_user)
+          INNER JOIN otus_tz.`groups` grp ON (grp.id = invc.group_id)
+        WHERE
+          invc.`status` = 'payed'
+          AND grp.start_date < @month_ago
+        GROUP BY invc.group_id, invc.user_id
+        ORDER BY NULL
+      ) as der1
+    GROUP BY
+      der1.group_id
+    ORDER BY
+      `TOTAL_USERS` DESC
+  ) as der2
+;
+*/

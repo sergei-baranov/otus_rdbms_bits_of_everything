@@ -330,7 +330,7 @@ FROM
         grp.title,
         invc.group_id,
         invc.user_id,
-        SUM((invc.amount + invc.discount)) > grp.price_full as payed_full
+        SUM((invc.amount + invc.discount)) >= grp.price_full as payed_full
       FROM
         otus_tz.invoice invc FORCE INDEX (status_group_user)
         INNER JOIN otus_tz.`groups` grp ON (grp.id = invc.group_id)
@@ -341,7 +341,7 @@ FROM
       ORDER BY NULL
     )
     SELECT
-      title AS 'TITLE',
+      title AS `TITLE`,
       round((sum(payed_full)/count(user_id) * 100), 2) as `PERCENT`,
       count(user_id) as `TOTAL_USERS`
     FROM
@@ -375,7 +375,7 @@ FROM
           grp.title,
           invc.group_id,
           invc.user_id,
-          SUM((invc.amount + invc.discount)) > grp.price_full as payed_full
+          SUM((invc.amount + invc.discount)) >= grp.price_full as payed_full
         FROM
           otus_tz.invoice invc FORCE INDEX (status_group_user)
           INNER JOIN otus_tz.`groups` grp ON (grp.id = invc.group_id)
